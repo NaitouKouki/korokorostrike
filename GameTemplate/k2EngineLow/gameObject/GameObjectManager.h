@@ -1,12 +1,14 @@
 ﻿/*!
- *@brief	CGameObjectのマネージャー。
- */
+*@brief	CGameObjectのマネージャー。
+*/
 
 #pragma once
 
 #include "gameObject/IGameObject.h"
 #include <functional>
 #include <vector>
+#include <list>
+#include <array>
 
 namespace nsK2EngineLow {
 	/// <summary>
@@ -244,6 +246,5 @@ namespace nsK2EngineLow {
 }
 
 
-	
 
- 
+

@@ -36,6 +36,17 @@ namespace nsK2EngineLow {
 		{
 			m_rigidBody.SetFriction(friction);
 		}
+		/// <summary>
+		/// 物理オブジェクトの座標と回転を設定
+		/// </summary>
+		/// <param name="pos">座標</param>
+		/// <param name="rot">回転</param>
+		void SetPositionAndRotation(const Vector3& pos, const Quaternion& rot)
+		{
+			m_rigidBody.SetPositionAndRotation(pos, rot);
+		}
+
+
 		btCollisionObject* GetbtCollisionObject()
 		{
 			return m_rigidBody.GetBody();
@@ -46,6 +57,10 @@ namespace nsK2EngineLow {
 		void Release()
 		{
 			m_rigidBody.Release();
+		}
+		RigidBody* GetBody()
+		{
+			return &m_rigidBody;
 		}
 	private:
 		MeshCollider m_meshCollider;		//メッシュコライダー。
