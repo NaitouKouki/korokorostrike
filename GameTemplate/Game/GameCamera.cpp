@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "HoldCamera.h"
+#include "GameCamera.h"
 #include "Game.h"
 #include "Player.h"
 
-HoldCamera::HoldCamera() {}
-HoldCamera::~HoldCamera() {}
+GameCamera::GameCamera() {}
+GameCamera::~GameCamera() {}
 
-bool HoldCamera::Start()
+bool GameCamera::Start()
 {
     // ターゲットからカメラ位置までのベクトルを設定
     m_toCameraPos.Set(0.0f, 100.0f, 300.0f);
@@ -21,7 +21,7 @@ bool HoldCamera::Start()
     return true;
 }
 
-void HoldCamera::Update()
+void GameCamera::Update()
 {
     if (m_isCameraEvent) {
         if (!m_isInit) {
@@ -83,7 +83,7 @@ void HoldCamera::Update()
     }
 }
 
-void HoldCamera::Render(RenderContext& rc)
+void GameCamera::Render(RenderContext& rc)
 {
     // 必要に応じて描画処理を記述
 

@@ -25,6 +25,12 @@ public:
 	RigidBodyInitData	rbInitData;
 	RigidBody			m_rigidBody;	// 剛体
 
+	//座標を取得。
+	const Vector3& GetPosition()const
+	{
+		return m_ballPosition;
+	}
+
 private:
 	CharacterController	 m_charaCon;		// キャラコン
 	ModelRender			m_ballRender;

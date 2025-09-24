@@ -6,11 +6,11 @@
 class Game;
 class Player;
 
-class HoldCamera : public IGameObject
+class GameCamera : public IGameObject
 {
 public:
-    HoldCamera();
-    ~HoldCamera();
+    GameCamera();
+    ~GameCamera();
     // スタート
     bool Start() override;
     // アップデート
