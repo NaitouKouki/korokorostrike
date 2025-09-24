@@ -4,8 +4,7 @@
 
 Title::Title()
 {
-	//画像を読み込む。
-	m_spriteRender.Init("Assets/sprite/Title.dds", 1920.0f, 1080.0f);
+	
 }
 
 Title::~Title()
@@ -15,6 +14,8 @@ Title::~Title()
 
 bool Title::Start()
 {
+	//画像を読み込む。
+	m_spriteRender.Init("Assets/ModelData/Title.DDS", 1920.0f, 1080.0f);
 	//BGM。
 	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/title.wav");
 	m_soundSource = NewGO<SoundSource>(0);
@@ -32,6 +33,8 @@ void Title::Update()
 	{
 		//m_describe = NewGO<Describe>(0, "describe");
 		DeleteGO(this);
+		//GameをNewGOで生成する。
+		NewGO<Game>(0, "game");
 	}
 }
 
