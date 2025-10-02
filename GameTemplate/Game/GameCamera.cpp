@@ -1,90 +1,105 @@
 #include "stdafx.h"
 #include "GameCamera.h"
-#include "Game.h"
 #include "Player.h"
+#include "Game.h"
 
-GameCamera::GameCamera() {}
-GameCamera::~GameCamera() {}
+GameCamera::GameCamera()
+{
+
+}
+
+GameCamera::~GameCamera()
+{
+
+}
 
 bool GameCamera::Start()
 {
-    // ターゲットからカメラ位置までのベクトルを設定
-    m_toCameraPos.Set(0.0f, 100.0f, 300.0f);
+	//注視点から視点までのベクトルを設定。
+	m_toCameraPos.Set(0.0f, 100.0f, 300.0f);
 
-    // プレイヤー（ボール）のインスタンスを探す
-    m_player = FindGO<Player>("player");
-    m_game = FindGO<Game>("game");
+	//プレイヤーのインスタンスを探す。
+	m_player = FindGO<Player>("player");
+	m_game = FindGO<Game>("game");
 
-    // カメライベント（追従）を有効化
-    m_isCameraEvent = true;
-
-    return true;
+	return true;
 }
 
 void GameCamera::Update()
 {
-    if (m_isCameraEvent) {
-        if (!m_isInit) {
-            // 三人称カメラの初期化
-            m_springCamera.Init(
-                *g_camera3D,		// 三人称カメラの挙動を行うカメラを指定
-                1000.0f,			// カメラの移動速度の最大値
-                true,				// カメラの慣性(スムージング)を有効にするか
-                5.0f				// カメラに設定するバネの剛性
-            );
-            m_isInit = true;
-        }
+		if (!m_isInit) {
+			//ばねカメラの初期化。
+			m_springCamera.Init(
+				*g_camera3D,		//ばねカメラの処理を行うカメラを指定する。
+				1000.0f,			//カメラの移動速度の最大値。
+				true,				//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う。
+				5.0f				//カメラに設定される球体コリジョンの半径。第３引数がtrueの時に有効になる。
+			);
+			m_isInit = true;
+		}
+		//カメラを更新。
+		//注視点を計算する。
+		Vector3 target = m_player->rbPos;
+		//プレイヤの足元からちょっと上を注視点とする。
+		target.y += 80.0f;
+		target += g_camera3D->GetForward() * 20.0f;
 
-        Vector3 toCameraPosOld = m_toCameraPos;
-        // パッド入力でカメラを回転
-        float x = g_pad[0]->GetRStickXF();
-        float y = g_pad[0]->GetRStickYF();
-        // Y軸回転
-        Quaternion qRot;
-        qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
-        qRot.Apply(m_toCameraPos);
-        // X軸回転
-        Vector3 axisX;
-        axisX.Cross(Vector3::AxisY, m_toCameraPos);
-        axisX.Normalize();
-        qRot.SetRotationDeg(axisX, 1.5f * y);
-        qRot.Apply(m_toCameraPos);
-        // カメラの回転の制限をチェック
-        // ターゲットからカメラまでのベクトルを正規化
-        // 俯角/仰角の制限
-        Vector3 toPosDir = m_toCameraPos;
-        toPosDir.Normalize();
-        if (toPosDir.y < -0.5f) {
-            // カメラが下を向きすぎ
-            m_toCameraPos = toCameraPosOld;
-        }
-        else if (toPosDir.y > 0.8f) {
-            // カメラが上を向きすぎ
-            m_toCameraPos = toCameraPosOld;
-        }
+		Vector3 toCameraPosOld = m_toCameraPos;
+		//パッドの入力を使ってカメラを回す。
+		float x = g_pad[0]->GetRStickXF();
+		float y = g_pad[0]->GetRStickYF();
+		//Y軸周りの回転
+		Quaternion qRot;
+		qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
+		qRot.Apply(m_toCameraPos);
+		//X軸周りの回転。
+		Vector3 axisX;
+		axisX.Cross(Vector3::AxisY, m_toCameraPos);
+		axisX.Normalize();
+		qRot.SetRotationDeg(axisX, 1.5f * y);
+		qRot.Apply(m_toCameraPos);
+		//カメラの回転の上限をチェックする。
+		//注視点から視点までのベクトルを正規化する。
+		//正規化すると、ベクトルの大きさが１になる。
+		//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
+		Vector3 toPosDir = m_toCameraPos;
+		toPosDir.Normalize();
+		if (toPosDir.y < -0.5f) {
+			//カメラが上向きすぎ。
+			m_toCameraPos = toCameraPosOld;
+		}
+		else if (toPosDir.y > 0.8f) {
+			//カメラが下向きすぎ。
+			m_toCameraPos = toCameraPosOld;
+		}
 
-        // ボールの現在位置に追従するためターゲット/位置を設定
-        if (m_player != nullptr) {
-            const Vector3 target = m_player->m_ballPosition;
-            const Vector3 pos = target + m_toCameraPos;
-            m_springCamera.SetTarget(target);
-            m_springCamera.SetPosition(pos);
-        }
-        else {
-            // ボールが見つからない場合はデフォルト位置に設定
-            const Vector3 target = Vector3::Zero;
-            const Vector3 pos = target + m_toCameraPos;
-            m_springCamera.SetTarget(target);
-            m_springCamera.SetPosition(pos);
-        }
+		//視点を計算する。
+		Vector3 pos = target + m_toCameraPos;
 
-        // カメラ更新
-        m_springCamera.Update();
-    }
+		//バネカメラに注視点と視点を設定する。
+		m_springCamera.SetPosition(pos);
+		m_springCamera.SetTarget(target);
+
+		//カメラの更新。
+		m_springCamera.Update();
 }
 
-void GameCamera::Render(RenderContext& rc)
-{
-    // 必要に応じて描画処理を記述
-
-}
+//void GameCamera::CameraEvent()
+//{
+//	m_toCameraTargetPos.Lerp(t, m_game->m_flagPos, m_player->m_position);
+//	t += 0.005;
+//	g_camera3D->SetTarget(m_toCameraTargetPos);
+//	Vector3 playerPos = m_player->m_position;
+//	playerPos.y += 600.0f;
+//
+//	Vector3 flagDirection = m_player->m_position - m_game->m_flagPos;
+//	flagDirection.Normalize();
+//	flagDirection *= 500.0f;
+//	playerPos += flagDirection;
+//
+//	g_camera3D->SetPosition(playerPos);
+//
+//	if (t > 1.0f) {
+//		m_isCameraEvent = true;
+//	}
+//}

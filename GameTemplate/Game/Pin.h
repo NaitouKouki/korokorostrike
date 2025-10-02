@@ -1,43 +1,41 @@
 #pragma once
+#include "gameObject/IGameObject.h"
+#include <math/Vector.h>
 
 class Game;
-class Pin;
-#include "gameObject/IGameObject.h"
 
-class Player : public IGameObject
+class Pin : public IGameObject
 {
 public:
-	Player();
-	~Player();
+	Pin();
+	~Pin();
 	// スタート
 	bool Start() override;
 	// アップデート
 	void Update() override;
-	//
-	void HitCollision();
 	// レンダー
 	void Render(nsK2EngineLow::RenderContext& rc) override;
 
-	Vector3         m_ballPosition = Vector3::Zero;
+	Vector3         m_boxPosition = Vector3::Zero;
 	Vector3         m_scale = Vector3::One;		// スケール
 
 	// 物理の位置と回転を取得するための一時変数
-	Vector3			rbPos = Vector3::Zero;
-	Quaternion		rbRot = Quaternion::Identity;
-	RigidBodyInitData	rbInitData;
+	Vector3			boPos = Vector3::Zero;
+	Quaternion		boRot = Quaternion::Identity;
+	RigidBodyInitData	boInitData;
 	RigidBody			m_rigidBody;	// 剛体
+
 
 	//座標を取得。
 	const Vector3& GetPosition()const
 	{
-		return m_ballPosition;
+		return m_boxPosition;
 	}
-
 private:
 	CharacterController	 m_charaCon;		// キャラコン
-	ModelRender			m_ballRender;
-	SphereCollider		m_sphereCollider;	// ボールの当たり判定
-	Pin*				m_pin = nullptr;
+	ModelRender			m_boxRender;
+	BoxCollider		m_boxcollider;	// ボックスの当たり判定
+	CollisionObject*	m_collisionObj;	// コリジョンオブジェクト
 
 	Game* m_game = nullptr;
 };
