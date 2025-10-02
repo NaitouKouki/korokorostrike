@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Game.h"
+#include "Pin.h"
+
 
 Player::Player()
 {
@@ -16,7 +18,7 @@ bool Player::Start()
 {
 	// モデル
 	m_ballRender.Init("Assets/modelData/ball.tkm");
-	m_ballPosition.Set(0.0f, 100.0f, -300.0f);
+	m_ballPosition.Set(0.0f, 90.0f, -300.0f);
 	m_ballRender.SetPosition(m_ballPosition);
 	m_ballRender.SetScale(1.3f, 1.3f, 1.3f);
 
@@ -37,17 +39,32 @@ bool Player::Start()
 	return true;
 }
 
+void Player::HitCollision() {
+	//コリジョンの取得。
+	const auto& collisions = g_collisionObjectManager->FindCollisionObjects("Pin");
+	//コリジョンの配列をfor文で回す。
+	for (auto collision : collisions)
+	{
+		//コリジョンとキャラが当たったら。
+		if (collision->IsHit(m_charaCon))
+		{
+			DeleteGO(m_pin);
+		}
+	}
+}
+
 void Player::Update()
 {
-	//今だけ座標を表示。(使わなくなったらけしてねー)
-	wchar_t wcsbuf[256];
-	swprintf_s(wcsbuf, 256, L"Pos: (%f, %f, %f)", m_ballPosition.x, m_ballPosition.y, m_ballPosition.z);
 	m_rigidBody.GetPositionAndRotation(rbPos, rbRot);
-	// 取得した位置と回転を反映する
+	//取得した位置と回転を反映する
 	m_ballRender.SetPosition(rbPos);
 	m_ballRender.SetRotation(rbRot);
 	m_ballRender.Update();
 	m_ballPosition = rbPos;
+	FindGO<Pin>("m_pin");
+	m_charaCon.SetPosition(m_ballPosition);
+	HitCollision();
+
 }
 
 

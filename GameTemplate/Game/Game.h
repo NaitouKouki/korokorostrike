@@ -3,10 +3,12 @@
 #include "Level3DRender/LevelRender.h"
 #include "Title.h"
 
-class Player;
 class Title;
+class Player;
+class Pin;
 class GameCamera;
 class Stage;
+class Totalscore;
 
 class Game : public IGameObject
 {
@@ -40,5 +42,8 @@ private:
 	Stage* m_stage = nullptr;
 	Title* m_titleScreen = nullptr;
 	Game* m_game = nullptr;
+	Pin* m_pin = nullptr;
+	Totalscore* m_totalscore = nullptr;
+
 };
 

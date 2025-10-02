@@ -17,6 +17,9 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Pin.cpp" />
+    <ClCompile Include="Totalscore.cpp" />
+    <ClCompile Include="Result.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -29,5 +32,8 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Pin.h" />
+    <ClInclude Include="Totalscore.h" />
+    <ClInclude Include="Result.h" />
   </ItemGroup>
 </Project>
