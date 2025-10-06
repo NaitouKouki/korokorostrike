@@ -5,7 +5,7 @@ Stage::Stage()
 {
     // ‚±‚±‚Å Stage01 “Æ©‚Ì m_transform ‚ğ¶¬
     //ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	m_modelRender.Init("Assets/modelData/stage.tkm");    
+	m_modelRender.Init("Assets/modelData/stage-bowling.tkm");
     m_modelRender.SetScale(2.0f,2.0f,2.0f);
     m_transform = new Transform();    
     m_modelRender.Update();

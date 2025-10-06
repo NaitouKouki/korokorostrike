@@ -1,5 +1,6 @@
 #pragma once
 
+class Title;
 class Game;
 class Pin;
 #include "gameObject/IGameObject.h"
@@ -13,8 +14,6 @@ public:
 	bool Start() override;
 	// アップデート
 	void Update() override;
-	//
-	void HitCollision();
 	// レンダー
 	void Render(nsK2EngineLow::RenderContext& rc) override;
 
@@ -34,10 +33,9 @@ public:
 	}
 
 private:
-	CharacterController	 m_charaCon;		// キャラコン
 	ModelRender			m_ballRender;
 	SphereCollider		m_sphereCollider;	// ボールの当たり判定
 	Pin*				m_pin = nullptr;
-
-	Game* m_game = nullptr;
+	Title*				m_title = nullptr;
+	Game*				m_game = nullptr;
 };

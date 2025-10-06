@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Pin.h"
 #include "Game.h"
+#include "Totalscore.h"
 #include "collision/CollisionObject.h"
 
 Pin::Pin()
@@ -15,30 +16,25 @@ Pin::~Pin()
 
 bool Pin::Start()
 {
-	// モデル
 	m_boxRender.Init("Assets/modelData/pin.tkm");
-	m_boxPosition.Set(0.0f, 90.0f, -100.0f);
 	m_boxRender.SetPosition(m_boxPosition);
 	m_boxRender.SetScale(0.2f, 0.2f, 0.2f);
 
-	/*CleateCollision();
-	*/
-	// ボックスの大きさ
 	m_boxcollider.Create(Vector3(17.0f, 60.0f, 17.0f));
 	boInitData.collider = &m_boxcollider;
 	boInitData.mass = 10.0f;
 	boInitData.pos = m_boxPosition;
 	boInitData.rot = Quaternion::Identity;
-	boInitData.restitution = 0.8f;  // 反発係数を正常な範囲に修正
+	boInitData.restitution = 0.8f;
 
 	m_rigidBody.Init(boInitData);
 	m_rigidBody.SetFriction(1);
-
 	m_charaCon.Init(0.1f, 0.1f, m_boxPosition);
 
 	m_game = FindGO<Game>("game");
 	return true;
 }
+
 
 void Pin::Update()
 {
@@ -64,13 +60,13 @@ void Pin::Update()
 
 	// どれだけ傾いているか確認（例：Y成分が小さくなると倒れてる）
 	float dot = upDir.dot(btVector3(0, 1, 0));  // 1 = 真上, 0 = 横向き
-	if (dot < 0.1f) { // 0.8fは調整可能な閾値
-		// 一定以上傾いていたら立て直す
-		//transform.setRotation(btQuaternion(0, 0, 0, 1)); // 単位クォータニオンでリセット
-		//m_rigidBody.GetBody()->setWorldTransform(transform);
-		//m_rigidBody.GetBody()->getMotionState()->setWorldTransform(transform);
-		//m_rigidBody.SetLinearVelocity(Vector3::Zero); // 速度をリセット
-		//m_rigidBody.SetAngularVelocity(Vector3::Zero); // 回転速度もリセット
+	if (dot < 0.1f) {
+		// 例: Updateで倒れたピンの番号を表示
+		Totalscore* m_totalScore = FindGO<Totalscore>("totalscore");
+		if (m_totalScore != nullptr) {
+			m_totalScore->AddScore(1);   // 1点加算（自由に変更可）
+		}
+		printf("Pin %d が倒れた！\n", m_pinID);
 		DeleteGO(this);
 		return;
 	}

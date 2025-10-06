@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Game.h"
+#include "Title.h"
 #include "Pin.h"
 
 
@@ -33,24 +34,8 @@ bool Player::Start()
 	m_rigidBody.Init(rbInitData);
 	m_rigidBody.SetFriction(1);
 
-	m_charaCon.Init(0.1f, 0.1f, m_ballPosition);
-
 	m_game = FindGO<Game>("game");
 	return true;
-}
-
-void Player::HitCollision() {
-	//コリジョンの取得。
-	const auto& collisions = g_collisionObjectManager->FindCollisionObjects("Pin");
-	//コリジョンの配列をfor文で回す。
-	for (auto collision : collisions)
-	{
-		//コリジョンとキャラが当たったら。
-		if (collision->IsHit(m_charaCon))
-		{
-			DeleteGO(m_pin);
-		}
-	}
 }
 
 void Player::Update()
@@ -61,10 +46,14 @@ void Player::Update()
 	m_ballRender.SetRotation(rbRot);
 	m_ballRender.Update();
 	m_ballPosition = rbPos;
-	FindGO<Pin>("m_pin");
-	m_charaCon.SetPosition(m_ballPosition);
-	HitCollision();
 
+	//スペースキーで前進
+	if (g_pad[0]->IsTrigger(enButtonB)) {
+		Vector3 forward = Vector3::Front;
+		forward.Normalize();
+		forward *= 300.0f; // 力の大きさを調整
+		m_rigidBody.SetLinearVelocity(forward);
+	}
 }
 
 

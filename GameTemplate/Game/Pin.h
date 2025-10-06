@@ -25,6 +25,9 @@ public:
 	RigidBodyInitData	boInitData;
 	RigidBody			m_rigidBody;	// 剛体
 
+	void SetID(int id) { m_pinID = id; }
+	void SetInitPosition(const Vector3& pos) { m_boxPosition = pos; }
+
 
 	//座標を取得。
 	const Vector3& GetPosition()const
@@ -32,10 +35,11 @@ public:
 		return m_boxPosition;
 	}
 private:
+
+	int m_pinID;
 	CharacterController	 m_charaCon;		// キャラコン
 	ModelRender			m_boxRender;
 	BoxCollider		m_boxcollider;	// ボックスの当たり判定
 	CollisionObject*	m_collisionObj;	// コリジョンオブジェクト
-
 	Game* m_game = nullptr;
 };
