@@ -29,12 +29,12 @@ public:
 	};
 	EnGameState m_gameState = enTitle;
 
+	Pin* pins[10];
 	int	 m_state = 0;
 
 private:
 	LevelRender		m_levelRender;
 
-	// タイトル画面
 	Title*			m_title = nullptr;
 	Player* m_player = nullptr;
 	GameCamera* m_camera = nullptr;
@@ -42,7 +42,6 @@ private:
 	Stage* m_stage = nullptr;
 	Title* m_titleScreen = nullptr;
 	Game* m_game = nullptr;
-	Pin* m_pin = nullptr;
 	Totalscore* m_totalscore = nullptr;
 
 };

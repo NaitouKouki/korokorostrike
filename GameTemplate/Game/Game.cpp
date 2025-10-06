@@ -15,15 +15,36 @@ Game::Game()
 Game::~Game()
 {
 	DeleteGO(m_player);
-	DeleteGO(m_pin);
-	DeleteGO(m_soundSource);
 	DeleteGO(m_camera);
 	DeleteGO(m_totalscore);
 }
 
 bool Game::Start()
 {
-	g_camera3D->SetPosition({ 0.0f, 100.0f, -600.0f });
+
+	Vector3 pinPositions[10] = {
+		{  0.0f, 10.0f, 200.0f },
+		{ -20.0f, 10.0f, 240.0f },
+		{  20.0f, 10.0f, 240.0f },
+		{ -40.0f, 10.0f, 280.0f },
+		{   0.0f, 10.0f, 280.0f },
+		{  40.0f, 10.0f, 280.0f },
+		{ -60.0f, 10.0f, 320.0f },
+		{ -20.0f, 10.0f, 320.0f },
+		{  20.0f, 10.0f, 320.0f },
+		{  60.0f, 10.0f, 320.0f }
+	};
+
+	//10本生成＆番号付け
+	for (int i = 0; i < 10; i++) {
+		pins[i] = NewGO<Pin>(0, ("pin" + std::to_string(i)).c_str());
+		pins[i]->SetID(i);
+		pins[i]->SetInitPosition(pinPositions[i]);
+	}
+
+
+
+	g_camera3D->SetPosition({ 0.0f, 140.0f, -600.0f });
 	GameStateUpdate();
 	switch (m_state)
 	{
@@ -33,11 +54,10 @@ bool Game::Start()
 	}
 
 	//当たり判定
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 	//重力の設定
-	PhysicsWorld::GetInstance()->SetGravity({ 0.0f,0.0f,0.0f });
+	PhysicsWorld::GetInstance()->SetGravity({ 0.0f,-300.0f,-1.0f });
 	FindGO<Player>("player");
-	FindGO<Pin>("pin");
 
 	Stage1();
 	return true;
@@ -45,28 +65,19 @@ bool Game::Start()
 
 void Game::Update()
 {
-	//Aボタンを押したらゲームを再度発射する
-	if (g_pad[0]->IsTrigger(enButtonA))
-	{
-		//m_player = NewGO<Player>(0, "player");
-		for (int i = 0; i < 10; i++) {
-			m_pin = NewGO<Pin>(0, "pin");
-		}
-		m_player = NewGO<Player>(0, "player");	
-	}
-	//Bボタンを押したら重力を加算しボールを転がす
-	if (g_pad[0]->IsTrigger(enButtonB))
-	{
-		PhysicsWorld::GetInstance()->SetGravity({ 0.0f,-300.0f,100.0f });
-	}
+	////Bボタンを押したら重力を加算しボールを転がす
+	//if (g_pad[0]->IsTrigger(enButtonB))
+	//{
+	//	PhysicsWorld::GetInstance()->SetGravity({ 0.0f,-300.0f,100.0f });
+	//}
 }
 
 void Game::Stage1()
 {
 	//m_camera = NewGO<GameCamera>(0, "camera");
 	m_stage = NewGO<Stage>(0, "stage");
-	m_pin = NewGO<Pin>(0, "pin");
 	m_player = NewGO<Player>(0, "player");
+	m_camera = NewGO<GameCamera>(0, "camera");
 	m_totalscore = NewGO<Totalscore>(0, "totalscore");
 }
 

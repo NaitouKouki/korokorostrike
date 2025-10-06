@@ -13,10 +13,13 @@ public:
 	~Totalscore();
 	bool Start() override;
 	void Update() override;
+	void AddScore(int p);
 	void Render(nsK2EngineLow::RenderContext& rc) override;
 
-private:
+
 	int m_score = 0;
+private:
+	int fallenPins = 0;
 	Title* m_title = nullptr;
 	Game* m_game = nullptr;	
 	Pin* m_pin = nullptr;

@@ -33,6 +33,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//////////////////////////////////////
 	NewGO<Title>(0, "title");
 
+	//スカイキューブの生成
+	SkyCube* skyCube = NewGO<SkyCube>(0);
+	skyCube->SetType(enSkyCubeType_Day);
+	skyCube->SetScale(300.0f);
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
 	//////////////////////////////////////
