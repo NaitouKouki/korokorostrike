@@ -1,7 +1,8 @@
 #pragma once
 
-class Title;
+class Result;
 class Game;
+class GameCamera;
 class Pin;
 #include "gameObject/IGameObject.h"
 
@@ -36,6 +37,8 @@ private:
 	ModelRender			m_ballRender;
 	SphereCollider		m_sphereCollider;	// ƒ{[ƒ‹‚Ì“–‚½‚è”»’è
 	Pin*				m_pin = nullptr;
-	Title*				m_title = nullptr;
+	GameCamera*			m_camera = nullptr;
+	Result*				m_Result = nullptr;
 	Game*				m_game = nullptr;
+
 };
