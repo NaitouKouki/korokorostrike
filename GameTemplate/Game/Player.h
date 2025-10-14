@@ -4,6 +4,7 @@ class Result;
 class Game;
 class GameCamera;
 class Pin;
+
 #include "gameObject/IGameObject.h"
 
 class Player : public IGameObject
@@ -18,12 +19,12 @@ public:
 	// レンダー
 	void Render(nsK2EngineLow::RenderContext& rc) override;
 
-	Vector3         m_ballPosition = Vector3::Zero;
-	Vector3         m_scale = Vector3::One;		// スケール
+	Vector3				m_ballPosition = Vector3::Zero;
+	Vector3				m_scale = Vector3::One;		// スケール
 
 	// 物理の位置と回転を取得するための一時変数
-	Vector3			rbPos = Vector3::Zero;
-	Quaternion		rbRot = Quaternion::Identity;
+	Vector3				rbPos = Vector3::Zero;
+	Quaternion			rbRot = Quaternion::Identity;
 	RigidBodyInitData	rbInitData;
 	RigidBody			m_rigidBody;	// 剛体
 
@@ -40,5 +41,4 @@ private:
 	GameCamera*			m_camera = nullptr;
 	Result*				m_Result = nullptr;
 	Game*				m_game = nullptr;
-
 };

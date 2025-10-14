@@ -5,8 +5,6 @@
 #include "GameCamera.h"
 #include "Result.h"
 
-
-
 Player::Player()
 {
 
@@ -53,23 +51,30 @@ void Player::Update()
 	if (g_pad[0]->IsTrigger(enButtonA)) {
 		Vector3 left = Vector3::Left;
 		left.Normalize();
-		left *= 50.0f; // 力の大きさを調整
+		left *= 100.0f; // 力の大きさを調整
 		m_rigidBody.SetLinearVelocity(left);
 	}
 	//Bボタンで前進
 	if (g_pad[0]->IsTrigger(enButtonB)) {
 		Vector3 forward = Vector3::Front;
 		forward.Normalize();
-		forward *= 300.0f; // 力の大きさを調整
+		forward *= 600.0f; // 力の大きさを調整
 		m_rigidBody.SetLinearVelocity(forward);
 	}
 	//Xボタンで右に移動
 	if (g_pad[0]->IsTrigger(enButtonX)) {
 		Vector3 right = Vector3::Right;
 		right.Normalize();
-		right *= 50.0f; // 力の大きさを調整
+		right *= 100.0f; // 力の大きさを調整
 		m_rigidBody.SetLinearVelocity(right);
 	}
+	//Yボタンで後ろに移動
+	if( g_pad[0]->IsTrigger(enButtonY)) {
+		Vector3 back = Vector3::Back;
+		back.Normalize();
+		back *= 100.0f; // 力の大きさを調整
+		m_rigidBody.SetLinearVelocity(back);
+	}	
 	//一定より下に落ちたらリセット
 	if (m_ballPosition.y < -50.0f) {
 		m_rigidBody.SetPositionAndRotation(Vector3(0.0f, 90.0f, -300.0f), Quaternion::Identity);

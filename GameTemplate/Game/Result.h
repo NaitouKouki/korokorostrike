@@ -20,8 +20,7 @@ public:
 private:
 	SpriteRender	m_spriteRender;
 	FontRender		m_fontRender;
-
-	Game* m_game = nullptr;
-	Totalscore* m_totalscore = nullptr;
-	int m_score = 100;
+	Game*			m_game = nullptr;
+	Totalscore*		m_totalscore = nullptr;
+	int				m_score = 100;
 };

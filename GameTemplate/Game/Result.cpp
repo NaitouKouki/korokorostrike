@@ -32,11 +32,10 @@ void Result::Update()
 	//Aボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-
-		//スコアと自身を削除する
+		//スコアと自身を削除する	
 		DeleteGO(m_totalscore);
-		DeleteGO(this);	
 		DeleteGO(m_game);
+		DeleteGO(this);	
 		//タイトルのオブジェクトをつくる
 		NewGO<Title>(0, "title");
 	}
