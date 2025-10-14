@@ -1,8 +1,10 @@
 #include "stdafx.h"
-#include "Player.h"
 #include "Game.h"
-#include "Title.h"
+#include "Player.h"
 #include "Pin.h"
+#include "GameCamera.h"
+#include "Result.h"
+
 
 
 Player::Player()
@@ -47,12 +49,34 @@ void Player::Update()
 	m_ballRender.Update();
 	m_ballPosition = rbPos;
 
-	//スペースキーで前進
+	//Aボタンで左に移動
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		Vector3 left = Vector3::Left;
+		left.Normalize();
+		left *= 50.0f; // 力の大きさを調整
+		m_rigidBody.SetLinearVelocity(left);
+	}
+	//Bボタンで前進
 	if (g_pad[0]->IsTrigger(enButtonB)) {
 		Vector3 forward = Vector3::Front;
 		forward.Normalize();
 		forward *= 300.0f; // 力の大きさを調整
 		m_rigidBody.SetLinearVelocity(forward);
+	}
+	//Xボタンで右に移動
+	if (g_pad[0]->IsTrigger(enButtonX)) {
+		Vector3 right = Vector3::Right;
+		right.Normalize();
+		right *= 50.0f; // 力の大きさを調整
+		m_rigidBody.SetLinearVelocity(right);
+	}
+	//一定より下に落ちたらリセット
+	if (m_ballPosition.y < -50.0f) {
+		m_rigidBody.SetPositionAndRotation(Vector3(0.0f, 90.0f, -300.0f), Quaternion::Identity);
+		m_rigidBody.SetLinearVelocity(Vector3::Zero);
+		m_rigidBody.SetAngularVelocity(Vector3::Zero);
+		NewGO<Result>(0, "result");
+		DeleteGO(this);
 	}
 }
 

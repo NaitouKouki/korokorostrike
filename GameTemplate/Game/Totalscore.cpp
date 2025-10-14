@@ -28,24 +28,6 @@ void Totalscore::Update()
         swprintf_s(scoreText, L"Score: %d", m_score);
         m_fontRender.SetText(scoreText);
         m_fontRender.Draw(*g_renderContext2D);
-
-        //倒れたピン数をカウント
-        for (int i = 0; i < 10; i++) {
-            if (m_game->pins[i] == nullptr) {
-                fallenPins++;
-            }
-        }
-
-        //その数をスコアに反映（倒れた分だけ）
-        //m_score = fallenPins * 1;   // 1本=1点ならこのまま
-        // 2倍,10点制などにするならここで調整可
-
-		if (m_score > 9) {// 10点超えたらゲーム終了
-            m_score = 1000000000;
-            m_game->m_gameState = Game::enResult;
-            return;
-        }
-
 }
 
 void Totalscore::AddScore(int p)

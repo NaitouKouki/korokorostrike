@@ -60,7 +60,7 @@ void Pin::Update()
 
 	// どれだけ傾いているか確認（例：Y成分が小さくなると倒れてる）
 	float dot = upDir.dot(btVector3(0, 1, 0));  // 1 = 真上, 0 = 横向き
-	if (dot < 0.1f) {
+	if (dot < 0.3f) {
 		// 例: Updateで倒れたピンの番号を表示
 		Totalscore* m_totalScore = FindGO<Totalscore>("totalscore");
 		if (m_totalScore != nullptr) {

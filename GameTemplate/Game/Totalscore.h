@@ -16,10 +16,19 @@ public:
 	void AddScore(int p);
 	void Render(nsK2EngineLow::RenderContext& rc) override;
 
-
+public:
 	int m_score = 0;
+	int m_totalscore = 0;
+
+
+	int GetTotalScore()
+	{
+		m_totalscore = m_score;
+		return m_totalscore;
+	};
+
+
 private:
-	int fallenPins = 0;
 	Title* m_title = nullptr;
 	Game* m_game = nullptr;	
 	Pin* m_pin = nullptr;

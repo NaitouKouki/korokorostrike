@@ -18,15 +18,17 @@ bool GameCamera::Start()
 	//注視点から視点までのベクトルを設定。
 	m_toCameraPos.Set(0.0f, 100.0f, -300.0f);
 
-	//プレイヤーのインスタンスを探す。
-	m_player = FindGO<Player>("player");
-	m_game = FindGO<Game>("game");
-
 	return true;
 }
 
 void GameCamera::Update()
 {
+	//プレイヤのゲームオブジェクトを取得。
+	m_player = FindGO<Player>("player");
+	if (m_player == nullptr) {
+		return;
+	}
+
 		if (!m_isInit) {
 			//ばねカメラの初期化。
 			m_springCamera.Init(
@@ -83,23 +85,3 @@ void GameCamera::Update()
 		//カメラの更新。
 		m_springCamera.Update();
 }
-
-//void GameCamera::CameraEvent()
-//{
-//	m_toCameraTargetPos.Lerp(t, m_game->m_flagPos, m_player->m_position);
-//	t += 0.005;
-//	g_camera3D->SetTarget(m_toCameraTargetPos);
-//	Vector3 playerPos = m_player->m_position;
-//	playerPos.y += 600.0f;
-//
-//	Vector3 flagDirection = m_player->m_position - m_game->m_flagPos;
-//	flagDirection.Normalize();
-//	flagDirection *= 500.0f;
-//	playerPos += flagDirection;
-//
-//	g_camera3D->SetPosition(playerPos);
-//
-//	if (t > 1.0f) {
-//		m_isCameraEvent = true;
-//	}
-//}
