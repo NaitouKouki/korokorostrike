@@ -26,22 +26,10 @@ public:
         return m_transform;
     }
 
-    Matrix GetWorldMatrix() const
-    {
-        // 独自の Transform からワールド行列を取得
-        if (m_transform) {
-            return m_modelRender.GetWorldMatrix(0);
-        }
-        return Matrix::Identity; // エラー時のデフォルト
-    }
+    
 
-    Transform* m_transform = nullptr;
-    //RigidBodyInitData	rbInitData;
-    //RigidBody			m_rigidBody;	// 剛体
-
-private: // 各ステージが独自の Transform を持つ
-
+private:
+    Transform*          m_transform = nullptr;
     PhysicsStaticObject m_phyStaticObject;		//静的物体用
-	ModelRender m_modelRender;					//モデルレンダラー
-    //SphereCollider		m_stageCollider;	// 床の当たり判定
+	ModelRender         m_modelRender;					//モデルレンダラー
 };

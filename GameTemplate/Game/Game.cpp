@@ -27,7 +27,6 @@ Game::~Game()
 
 bool Game::Start()
 {
-
 	g_camera3D->SetPosition({ 0.0f, 140.0f, -600.0f });
 	GameStateUpdate();
 	switch (m_state)
@@ -36,7 +35,6 @@ bool Game::Start()
 		Stage1();
 		break;
 	}
-
 	//当たり判定
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 	//重力の設定
