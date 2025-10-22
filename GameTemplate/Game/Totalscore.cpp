@@ -27,6 +27,7 @@ void Totalscore::Update()
         wchar_t scoreText[256];
         swprintf_s(scoreText, L"Score: %d", m_score);
         m_fontRender.SetText(scoreText);
+        m_fontRender.SetColor(g_vec4Black);
         m_fontRender.Draw(*g_renderContext2D);
 }
 

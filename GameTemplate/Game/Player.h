@@ -4,6 +4,7 @@ class Result;
 class Game;
 class GameCamera;
 class Pin;
+class Totalscore;
 
 #include "gameObject/IGameObject.h"
 
@@ -41,4 +42,5 @@ private:
 	GameCamera*			m_camera = nullptr;
 	Result*				m_Result = nullptr;
 	Game*				m_game = nullptr;
+	Totalscore*			m_totalscore = nullptr;
 };
