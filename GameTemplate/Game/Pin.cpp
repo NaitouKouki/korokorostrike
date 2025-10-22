@@ -22,7 +22,7 @@ bool Pin::Start()
 
 	m_boxcollider.Create(Vector3(17.0f, 60.0f, 17.0f));
 	boInitData.collider = &m_boxcollider;
-	boInitData.mass = 10.0f;
+	boInitData.mass = 50.0f;
 	boInitData.pos = m_boxPosition;
 	boInitData.rot = Quaternion::Identity;
 	boInitData.restitution = 0.8f;
