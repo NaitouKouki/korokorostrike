@@ -34,17 +34,18 @@ void Result::Update()
 	{
 		//スコアと自身を削除する	
 		DeleteGO(m_totalscore);
-		DeleteGO(m_game);
-		DeleteGO(this);	
-		//タイトルのオブジェクトをつくる
+		DeleteGO(m_game);		
 		NewGO<Title>(0, "title");
+		
+		DeleteGO(this);	
+
 	}
 }
 
 void Result::TotalScore()
 {
 	wchar_t scorew[256];
-	swprintf_s(scorew, 256, L"%d点",m_totalscore->GetTotalScore());
+	swprintf_s(scorew, 256, L"%d点",m_totalscore->GameScore());
 	m_fontRender.SetText(scorew);
 	m_fontRender.SetPosition({ 200.0f, 100.0f, 0.0f });
 	m_fontRender.SetScale(5.0);

@@ -22,10 +22,10 @@ bool Pin::Start()
 
 	m_boxcollider.Create(Vector3(17.0f, 60.0f, 17.0f));
 	boInitData.collider = &m_boxcollider;
-	boInitData.mass = 50.0f;
+	boInitData.mass = 500.0f;
 	boInitData.pos = m_boxPosition;
 	boInitData.rot = Quaternion::Identity;
-	boInitData.restitution = 0.8f;
+	boInitData.restitution = 0.3f;
 
 	m_rigidBody.Init(boInitData);
 	m_rigidBody.SetFriction(1);
@@ -55,18 +55,16 @@ void Pin::Update()
 
 	// Upベクトルを算出（Y軸基準の場合）
 	btVector3 upDir = quatRotate(rot, btVector3(0, 1, 0));
-
 	upDir.normalize();
 
 	// どれだけ傾いているか確認（例：Y成分が小さくなると倒れてる）
 	float dot = upDir.dot(btVector3(0, 1, 0));  // 1 = 真上, 0 = 横向き
-	if (dot < 0.3f) {
+	if (dot < 0.6f) {
 		// 例: Updateで倒れたピンの番号を表示
 		Totalscore* m_totalScore = FindGO<Totalscore>("totalscore");
 		if (m_totalScore != nullptr) {
 			m_totalScore->AddScore(1);   // 1点加算（自由に変更可）
 		}
-		printf("Pin %d が倒れた！\n", m_pinID);
 		DeleteGO(this);
 		return;
 	}
