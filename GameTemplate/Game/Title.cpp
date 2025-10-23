@@ -25,8 +25,8 @@ bool Title::Start()
     m_startSprite.Init("Assets/Sprite/StartButton.DDS", 500.0f, 240.0f);
     m_selectSprite.Init("Assets/Sprite/SelectButton.DDS", 500.0f, 240.0f);
 
-    m_startBasePos = Vector3(-500.0f, -200.0f, 0.0f); 
-    m_selectBasePos = Vector3(500.0f, -200.0f, 0.0f);  
+    m_startBasePos = Vector3(-400.0f, -200.0f, 0.0f); 
+    m_selectBasePos = Vector3(400.0f, -200.0f, 0.0f);  
 
     // 初期配置（必ず毎フレーム SetPosition するので Start では基準のみ）
     m_selectedIndex = 0;
