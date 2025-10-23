@@ -6,67 +6,84 @@
 #include "GameCamera.h"
 #include "Stage.h"
 #include "Totalscore.h"
+#include "Result.h"
 
 Game::Game()
 {
-
 }
 
 Game::~Game()
 {
-	DeleteGO(m_camera);
-	DeleteGO(m_player);
-	DeleteGO(m_totalscore);
-	DeleteGO(m_stage);
-
-	auto pins = FindGOs<Pin>("pin");
-	for (auto pin : pins) {
-		DeleteGO(pin);
-	}
+	DeleteAll();
 }
 
 bool Game::Start()
 {
 	g_camera3D->SetPosition({ 0.0f, 140.0f, -600.0f });
-	GameStateUpdate();
 
-	switch (m_state)
-	{
-	case 0:
-		Stage1();
-		break;
+	m_currentGame = 1;
+	m_throwCount = 1;
+	m_state = 0;
 
-	case 1:
-		DeleteGO(m_player);
-		DeleteGO(m_camera);
-		NewGO<Player>(0, "player");
-		NewGO<GameCamera>(0, "camera");
-		break;
+	mainStage();
 
-	default:
-		break;
-	}
-
-	// Physics 設定
+	// Physics設定
+	//当たり判定を可視化する
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 	PhysicsWorld::GetInstance()->SetGravity({ 0.0f, -400.0f, -5.0f });
+	m_totalscore = NewGO<Totalscore>(0, "totalscore");
 
-	FindGO<Player>("player");
-	FindGO<GameCamera>("camera");
 	return true;
 }
 
 void Game::Update()
 {
-	GameStateUpdate();
+
+	switch (m_state)
+	{
+	case 0:
+		// 通常プレイ中（何もせず待つ）
+		break;
+
+	case 1:
+		// 次の投球（2投目）
+		DeleteGO(m_player);
+		DeleteGO(m_camera);
+		m_player = NewGO<Player>(0, "player");
+		m_camera = NewGO<GameCamera>(0, "camera");
+		m_throwCount = 2;
+		m_state = 0; // 状態を戻す
+		break;
+	case 2:
+		// 1ゲーム終了
+		m_currentGame++;
+		m_throwCount = 1;
+
+		if (m_currentGame <= MAX_GAMES) 
+		{
+			// 次のゲームをスタート
+			DeleteAll();
+			mainStage();
+			m_state = 0;
+		} 
+		else 
+		{
+			// 全5ゲーム終了 → 結果画面
+			DeleteAll();
+			NewGO<Result>(0, "result");
+			m_state = 3;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
-void Game::Stage1()
+void Game::mainStage()
 {
 	m_stage = NewGO<Stage>(0, "stage");
 	m_player = NewGO<Player>(0, "player");
 	m_camera = NewGO<GameCamera>(0, "camera");
-	m_totalscore = NewGO<Totalscore>(0, "totalscore");
 
 	Vector3 pinPositions[10] = {
 		{  0.0f, 30.0f, 700.0f },
@@ -81,7 +98,6 @@ void Game::Stage1()
 		{  60.0f, 30.0f, 820.0f }
 	};
 
-	// ピン10本生成＆番号設定
 	for (int i = 0; i < 10; i++) {
 		pins[i] = NewGO<Pin>(0, "pin");
 		pins[i]->SetID(i);
@@ -89,8 +105,15 @@ void Game::Stage1()
 	}
 }
 
-void Game::GameStateUpdate()
+void Game::DeleteAll()
 {
+	DeleteGO(m_player);
+	DeleteGO(m_camera);
+	DeleteGO(m_stage);
+	auto pins = FindGOs<Pin>("pin");
+	for (auto pin : pins) {
+		DeleteGO(pin);
+	}
 }
 
 void Game::Render(RenderContext& rc)

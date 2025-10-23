@@ -20,6 +20,7 @@
     <ClCompile Include="Pin.cpp" />
     <ClCompile Include="Totalscore.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="SelectPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -35,5 +36,6 @@
     <ClInclude Include="Pin.h" />
     <ClInclude Include="Totalscore.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="SelectPanel.h" />
   </ItemGroup>
 </Project>

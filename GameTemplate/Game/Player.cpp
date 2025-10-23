@@ -25,10 +25,10 @@ bool Player::Start()
     // 球の当たり判定と物理挙動
     m_sphereCollider.Create(17.0f);
     rbInitData.collider = &m_sphereCollider;
-    rbInitData.mass = 100.0f;
+    rbInitData.mass = 1200.0f;
     rbInitData.pos = m_ballPosition;
     rbInitData.rot = Quaternion::Identity;
-    rbInitData.restitution = 1.0f;   // 反発係数
+    rbInitData.restitution = 0.5f;   // 反発係数
 
     m_rigidBody.Init(rbInitData);
     m_rigidBody.SetFriction(1);
@@ -48,43 +48,78 @@ void Player::Update()
     m_ballRender.Update();
     m_ballPosition = rbPos;
 
-    //----------------------------------------
-    // 入力処理
-    //----------------------------------------
-    // Bボタン：やや右方向に前進
-    if (g_pad[0]->IsTrigger(enButtonB)) {
-        Vector3 dir = Vector3::Front + (Vector3::Right * 0.2f); // 少し右方向成分を加える
-        dir.Normalize();
-        m_rigidBody.SetLinearVelocity(dir * 800.0f);
-    }
+    // メンバ変数として追加（Player.h）
+    float m_curveAmount = 0.0f;
+    Vector3 m_throwDir;
+    bool m_isThrown = false;
 
-    // Aボタン：左移動
+
+    // Aボタン：やや右に投げる
     if (g_pad[0]->IsTrigger(enButtonA)) {
-        m_rigidBody.SetLinearVelocity(Vector3::Left * 200.0f);
+        m_curveAmount = 0.2f; // 左方向（マイナスで左、プラスで右）
+        m_throwDir = Vector3::Front + (Vector3::Left * fabs(m_curveAmount));
+        m_throwDir.Normalize();
+
+        m_rigidBody.SetLinearVelocity(m_throwDir * 800.0f);
+        
+        // 横方向のスピンを加える（左に曲がるスピン）
+        Vector3 spin = Vector3(0.0f, 200.0f, 50.0f); // Y軸回転速度（値が大きいほど曲がる）
+        m_rigidBody.SetAngularVelocity(spin);
+        m_isThrown = true;
+    }
+    // Xボタン：やや左に投げる
+    if (g_pad[0]->IsTrigger(enButtonX)) {
+        m_curveAmount = -0.2f; // 右方向（Aの逆向きになっている）
+        m_throwDir = Vector3::Front + (Vector3::Right *fabs(m_curveAmount));
+        m_throwDir.Normalize();
+        m_rigidBody.SetLinearVelocity(m_throwDir * 800.0f);
+        
+        // 横方向のスピンを加える（右に曲がるスピン）
+        Vector3 spin = Vector3(0.0f, 200.0f, -50.0f); // Y軸回転速度（値が大きいほど曲がる）
+        m_rigidBody.SetAngularVelocity(spin);
+        m_isThrown = true;
     }
 
-    // Xボタン：右移動
-    if (g_pad[0]->IsTrigger(enButtonX)) {
-        m_rigidBody.SetLinearVelocity(Vector3::Right * 200.0f);
+    // Bボタン：スピン付きで前進
+    if (g_pad[0]->IsTrigger(enButtonB)) {
+        Vector3 dir = Vector3::Front;     // 前方向へ進む
+        dir.Normalize();
+
+        // 進行方向の速度設定
+        m_rigidBody.SetLinearVelocity(dir * 800.0f);
+        m_isThrown = true;
     }
 
     // Yボタン：後退
     if (g_pad[0]->IsTrigger(enButtonY)) {
-        m_rigidBody.SetLinearVelocity(Vector3::Back * 200.0f);
+        m_rigidBody.SetLinearVelocity(Vector3::Back * 500.0f);
     }
 
-    //----------------------------------------
-    // 入力がないときの減速処理
-    //----------------------------------------
-    if (!g_pad[0]->IsPressAnyKey()) {
+
+    if (g_pad[0]->IsPressAnyKey()) {
         Vector3 velocity = m_rigidBody.GetLinearVelocity();
-        velocity *= 0.99f; // 減速率
+        velocity *= 0.991f; // 減速率
         m_rigidBody.SetLinearVelocity(velocity);
     }
 
-    //----------------------------------------
-    // 落下時のリセット処理
-    //----------------------------------------
+	// 曲がりを徐々に減衰させる処理
+    if (m_isThrown) {
+        // 毎フレーム、傾きを少しずつ0に近づける
+        m_curveAmount *= 0.95f;  // 減衰率（小さいほど早く真っ直ぐになる）
+
+        // 新しい方向ベクトルを再計算
+        Vector3 dir = Vector3::Front + (Vector3::Right * m_curveAmount);
+        dir.Normalize();
+
+        // 現在の速度を保持しつつ方向だけ補正
+        Vector3 velocity = m_rigidBody.GetLinearVelocity();
+        float speed = velocity.Length();
+
+        m_rigidBody.SetLinearVelocity(dir * speed);
+    }
+
+
+    //落下後の処理
     if (m_ballPosition.y < -50.0f && m_game->m_state == 0)
     {
         // 初期位置にリセット
@@ -93,26 +128,25 @@ void Player::Update()
         m_rigidBody.SetAngularVelocity(Vector3::Zero);
 
         m_totalscore = FindGO<Totalscore>("totalscore");
-
-        // スコアが10ならリザルトへ
-        if (m_totalscore->m_score == 10) {
-            NewGO<Result>(0, "result");
-            DeleteGO(this);
-        }
-        else {
+        if (m_game->m_throwCount == 1) 
+        {
+			// 1投目終了 → 2投目へ    
             m_game->m_state = 1;
         }
-    }
+        else 
+        {
+            // 2投目終了 → 次のゲームへ
+            m_game->m_state = 2;
+            m_totalscore->GameScore();
+			m_totalscore->m_score = 0;// スコアリセット
+        }
+        //スコアを10点取った場合次のゲームへ
+        if (m_totalscore->m_score == 10) {
+			m_game->m_state = 2;
+			m_totalscore->GameScore();
+			m_totalscore->m_score = 0;// スコアリセット
 
-    if (m_ballPosition.y < -100.0f && m_game->m_state == 1)
-    {
-        // リザルト画面へ遷移
-        m_rigidBody.SetPositionAndRotation(Vector3(0.0f, 90.0f, -300.0f), Quaternion::Identity);
-        m_rigidBody.SetLinearVelocity(Vector3::Zero);
-        m_rigidBody.SetAngularVelocity(Vector3::Zero);
-
-        NewGO<Result>(0, "result");
-        DeleteGO(this);
+        }
     }
 }
 
