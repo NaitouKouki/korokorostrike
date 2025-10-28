@@ -3,6 +3,7 @@
 #include "Title.h"
 #include "Game.h"
 #include "TotalScore.h"
+#include "FrameCount.h"
 
 Result::Result()
 {
@@ -32,9 +33,9 @@ void Result::Update()
 	//Aボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		//スコアと自身を削除する	
 		DeleteGO(m_totalscore);
-		DeleteGO(m_game);		
+		DeleteGO(FindGO<FrameCount>("framecount"));
+		DeleteGO(m_game);	
 		NewGO<Title>(0, "title");
 		
 		DeleteGO(this);	

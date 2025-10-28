@@ -21,6 +21,7 @@
     <ClCompile Include="Totalscore.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SelectPanel.cpp" />
+    <ClCompile Include="FrameCount.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -37,5 +38,6 @@
     <ClInclude Include="Totalscore.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SelectPanel.h" />
+    <ClInclude Include="FrameCount.h" />
   </ItemGroup>
 </Project>

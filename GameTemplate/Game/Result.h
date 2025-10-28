@@ -2,8 +2,8 @@
 
 class Game;
 class Totalscore;
-class Timer;
-class Flag;
+class Title;
+class FrameCount;
 
 class Result : public IGameObject
 {
@@ -22,5 +22,6 @@ private:
 	FontRender		m_fontRender;
 	Game*			m_game = nullptr;
 	Totalscore*		m_totalscore = nullptr;
+	FrameCount*		m_frameCount = nullptr;
 	int				m_score = 100;
 };

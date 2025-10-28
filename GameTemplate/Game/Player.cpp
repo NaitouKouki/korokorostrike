@@ -56,7 +56,7 @@ void Player::Update()
 
     // Aボタン：やや右に投げる
     if (g_pad[0]->IsTrigger(enButtonA)) {
-        m_curveAmount = 0.2f; // 左方向（マイナスで左、プラスで右）
+        m_curveAmount = 0.3f; // 左方向（マイナスで左、プラスで右）
         m_throwDir = Vector3::Front + (Vector3::Left * fabs(m_curveAmount));
         m_throwDir.Normalize();
 
@@ -67,9 +67,10 @@ void Player::Update()
         m_rigidBody.SetAngularVelocity(spin);
         m_isThrown = true;
     }
+
     // Xボタン：やや左に投げる
     if (g_pad[0]->IsTrigger(enButtonX)) {
-        m_curveAmount = -0.2f; // 右方向（Aの逆向きになっている）
+        m_curveAmount = -0.3f; // 右方向（Aの逆向きになっている）
         m_throwDir = Vector3::Front + (Vector3::Right *fabs(m_curveAmount));
         m_throwDir.Normalize();
         m_rigidBody.SetLinearVelocity(m_throwDir * 800.0f);
@@ -80,7 +81,7 @@ void Player::Update()
         m_isThrown = true;
     }
 
-    // Bボタン：スピン付きで前進
+    // Bボタン：前進
     if (g_pad[0]->IsTrigger(enButtonB)) {
         Vector3 dir = Vector3::Front;     // 前方向へ進む
         dir.Normalize();
@@ -92,9 +93,8 @@ void Player::Update()
 
     // Yボタン：後退
     if (g_pad[0]->IsTrigger(enButtonY)) {
-        m_rigidBody.SetLinearVelocity(Vector3::Back * 500.0f);
+        m_rigidBody.SetLinearVelocity(Vector3::Back * 1000.0f);
     }
-
 
     if (g_pad[0]->IsPressAnyKey()) {
         Vector3 velocity = m_rigidBody.GetLinearVelocity();
@@ -105,7 +105,7 @@ void Player::Update()
 	// 曲がりを徐々に減衰させる処理
     if (m_isThrown) {
         // 毎フレーム、傾きを少しずつ0に近づける
-        m_curveAmount *= 0.95f;  // 減衰率（小さいほど早く真っ直ぐになる）
+        m_curveAmount *= 0.91f;  // 減衰率（小さいほど早く真っ直ぐになる）
 
         // 新しい方向ベクトルを再計算
         Vector3 dir = Vector3::Front + (Vector3::Right * m_curveAmount);
@@ -120,7 +120,7 @@ void Player::Update()
 
 
     //落下後の処理
-    if (m_ballPosition.y < -50.0f && m_game->m_state == 0)
+    if (m_ballPosition.y < -50.0f && m_game->m_state == 0||m_ballPosition.y >900.0f && m_game->m_state == 0)
     {
         // 初期位置にリセット
         m_rigidBody.SetPositionAndRotation(Vector3(0.0f, 90.0f, -800.0f), Quaternion::Identity);
@@ -147,6 +147,8 @@ void Player::Update()
 			m_totalscore->m_score = 0;// スコアリセット
 
         }
+        //一定より高かった場合も同様に処理する
+
     }
 }
 

@@ -37,6 +37,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	SkyCube* skyCube = NewGO<SkyCube>(0);
 	skyCube->SetType(enSkyCubeType_Day);
 	skyCube->SetScale(300.0f);
+	skyCube->SetLuminance(1.5f);
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
 	//////////////////////////////////////
