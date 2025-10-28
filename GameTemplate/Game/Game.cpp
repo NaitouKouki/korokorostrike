@@ -7,6 +7,7 @@
 #include "Stage.h"
 #include "Totalscore.h"
 #include "Result.h"
+#include "FrameCount.h"
 
 Game::Game()
 {
@@ -15,6 +16,7 @@ Game::Game()
 Game::~Game()
 {
 	DeleteAll();
+	DeleteGO(m_stage);
 }
 
 bool Game::Start()
@@ -24,6 +26,12 @@ bool Game::Start()
 	m_currentGame = 1;
 	m_throwCount = 1;
 	m_state = 0;
+
+	// Game::Start()
+	m_frameCount = NewGO<FrameCount>(0, "framecount");
+	m_frameCount->SetFrame(m_currentGame , m_maxGameCount);
+
+	m_stage = NewGO<Stage>(0, "stage");
 
 	mainStage();
 
@@ -48,18 +56,17 @@ void Game::Update()
 	case 1:
 		// 次の投球（2投目）
 		DeleteGO(m_player);
-		DeleteGO(m_camera);
 		m_player = NewGO<Player>(0, "player");
-		m_camera = NewGO<GameCamera>(0, "camera");
 		m_throwCount = 2;
 		m_state = 0; // 状態を戻す
 		break;
 	case 2:
 		// 1ゲーム終了
 		m_currentGame++;
+		m_frameCount->AddFrame();
 		m_throwCount = 1;
 
-		if (m_currentGame <= MAX_GAMES) 
+		if (m_currentGame <= m_maxGameCount) 
 		{
 			// 次のゲームをスタート
 			DeleteAll();
@@ -70,6 +77,7 @@ void Game::Update()
 		{
 			// 全5ゲーム終了 → 結果画面
 			DeleteAll();
+			DeleteGO(m_frameCount);
 			NewGO<Result>(0, "result");
 			m_state = 3;
 		}
@@ -81,7 +89,6 @@ void Game::Update()
 
 void Game::mainStage()
 {
-	m_stage = NewGO<Stage>(0, "stage");
 	m_player = NewGO<Player>(0, "player");
 	m_camera = NewGO<GameCamera>(0, "camera");
 
@@ -107,9 +114,9 @@ void Game::mainStage()
 
 void Game::DeleteAll()
 {
+
 	DeleteGO(m_player);
 	DeleteGO(m_camera);
-	DeleteGO(m_stage);
 	auto pins = FindGOs<Pin>("pin");
 	for (auto pin : pins) {
 		DeleteGO(pin);

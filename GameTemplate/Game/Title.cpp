@@ -1,19 +1,14 @@
 #include "stdafx.h"
 #include "Title.h"
 #include "Game.h"
-#include "SelectPanel.h" // セレクト画面（あれば）
+#include "SelectPanel.h"
 
 // 画面サイズ（必要なら実際のゲームの値に合わせて変更）
 static const float SCREEN_W = 1920.0f;
 static const float SCREEN_H = 1080.0f;
 
-Title::Title()
-{
-}
-
-Title::~Title()
-{
-}
+Title::Title(){}
+Title::~Title(){}
 
 bool Title::Start()
 {
