@@ -1,43 +1,32 @@
 #pragma once
-
 #include "gameObject/IGameObject.h"
+#include <vector>
 
-class Title;
 class Game;
-class Pin;
 
-class Totalscore :public IGameObject
+class Totalscore : public IGameObject
 {
 public:
-	Totalscore();
-	~Totalscore();
-	bool Start() override;
-	void Update() override;
-	void AddScore(int p);
-	void Render(nsK2EngineLow::RenderContext& rc) override;
+    Totalscore();
+    ~Totalscore();
 
-public:
-	int m_score = 0;
-	int m_totalscore = 0;
-	int m_gamescore = 0;
-	//合計スコア計算用
-	int GameScore() 
-	{
-		m_totalscore += m_gamescore;
-		return m_totalscore;
-	}
-	//合計スコア取得用
-	int GetTotalScore()
-	{
-		m_gamescore = m_score;
-		return m_gamescore;
-	};
+    bool Start() override;
+    void Update() override;
+    void Render(nsK2EngineLow::RenderContext& rc) override;
 
+    void AddScore(int points);          // スコア加算
+    void RegisterGameScore();           // ゲームごとにスコア登録
+    int  GetTotalScore() const;         // 合計スコア取得
+    int m_score = 0;                    // 現在のスコア
+    int m_gamescore = 0;                // 今回ゲームのスコア
 private:
-	Title*			m_title = nullptr;
-	Game*			m_game = nullptr;	
-	Pin*			m_pin = nullptr;
-	FontRender		m_fontRender;	
-	RenderContext*	g_renderContext2D = nullptr;	
-};
+    int m_totalScore = 0;               // 全体の合計スコア
+    int m_gameScores[10] = {};          // 各ゲームのスコア配列
+    bool m_isVisible = true;            // 表示状態フラグ
+private:
+	Game* m_game = nullptr;             // ゲームオブジェクトへのポインタ
+	FontRender m_fontRender;            //スコア表示用
+    FontRender m_mainScoreFont;         // 合計スコア表示用
+    std::vector<std::unique_ptr<FontRender>> m_scoreFonts;
 
+};

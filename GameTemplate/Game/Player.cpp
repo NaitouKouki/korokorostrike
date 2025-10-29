@@ -120,7 +120,7 @@ void Player::Update()
 
 
     //落下後の処理
-    if (m_ballPosition.y < -50.0f && m_game->m_state == 0||m_ballPosition.y >900.0f && m_game->m_state == 0)
+    if (m_ballPosition.y < -50.0f && m_game->m_state == 0 || m_ballPosition.y >700.0f && m_game->m_state == 0)
     {
         // 初期位置にリセット
         m_rigidBody.SetPositionAndRotation(Vector3(0.0f, 90.0f, -800.0f), Quaternion::Identity);
@@ -137,14 +137,13 @@ void Player::Update()
         {
             // 2投目終了 → 次のゲームへ
             m_game->m_state = 2;
-            m_totalscore->GameScore();
-			m_totalscore->m_score = 0;// スコアリセット
+            m_totalscore->RegisterGameScore();
         }
         //スコアを10点取った場合次のゲームへ
-        if (m_totalscore->m_score == 10) {
+        if (m_totalscore->m_gamescore == 10) {
 			m_game->m_state = 2;
-			m_totalscore->GameScore();
-			m_totalscore->m_score = 0;// スコアリセット
+			m_totalscore->RegisterGameScore();
+			m_totalscore->m_gamescore = 0;// スコアリセット
 
         }
         //一定より高かった場合も同様に処理する
