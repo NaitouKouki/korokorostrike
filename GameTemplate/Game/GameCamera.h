@@ -17,6 +17,8 @@ public:
 	bool Start();
 	//アップデート
 	void Update();
+	//レンダー
+	void Render(nsK2EngineLow::RenderContext& rc);
 
 private:
 	Vector3			m_toCameraPos = Vector3::One;

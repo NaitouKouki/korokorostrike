@@ -10,6 +10,7 @@ class GameCamera;
 class Stage;
 class Totalscore;
 class FrameCount;
+class BackGround;
 
 class Game : public IGameObject
 {
@@ -37,6 +38,6 @@ private:
 	Game*			m_game = nullptr;
 	Totalscore*		m_totalscore = nullptr;
 	FrameCount*		m_frameCount = nullptr;
+	BackGround*		m_background = nullptr;
 	Pin*			pins[10];
-
 };

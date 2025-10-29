@@ -24,6 +24,7 @@ private:
     int m_currentFrame = 1;
     int m_maxFrame = 10;
     bool m_visible = true;
+	bool m_isVisible = true;
 
     FontRender m_fontRender;
     Game* m_game = nullptr;

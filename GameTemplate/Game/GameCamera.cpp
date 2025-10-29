@@ -85,3 +85,8 @@ void GameCamera::Update()
 		//カメラの更新。
 		m_springCamera.Update();
 }
+
+void GameCamera::Render(nsK2EngineLow::RenderContext& rc)
+{
+	(void)rc;
+}

@@ -8,6 +8,7 @@
 #include "Totalscore.h"
 #include "Result.h"
 #include "FrameCount.h"
+#include "BackGround.h"
 
 Game::Game()
 {
@@ -25,7 +26,9 @@ bool Game::Start()
 
 	m_currentGame = 1;
 	m_throwCount = 1;
-	m_state = 0;
+	m_state = 0;	
+	
+	NewGO<BackGround>(0, "background");
 
 	// Game::Start()
 	m_frameCount = NewGO<FrameCount>(0, "framecount");
@@ -56,7 +59,9 @@ void Game::Update()
 	case 1:
 		// 次の投球（2投目）
 		DeleteGO(m_player);
+		DeleteGO(m_camera);
 		m_player = NewGO<Player>(0, "player");
+		m_camera = NewGO<GameCamera>(0, "camera");
 		m_throwCount = 2;
 		m_state = 0; // 状態を戻す
 		break;
