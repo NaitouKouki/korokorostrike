@@ -83,10 +83,9 @@ void Title::Update()
         m_selectSprite.SetMulColor(Vector4(1, 1, 1, 1));
     }
 
-    // 必ず SetPosition/SetScale を毎フレーム呼ぶ
     m_startSprite.SetPosition(startPos);
     m_startSprite.SetScale(startScale);
-    m_startSprite.Update(); // 反映が必要な実装なら毎フレ呼ぶ
+    m_startSprite.Update(); 
 
     m_selectSprite.SetPosition(selectPos);
     m_selectSprite.SetScale(selectScale);

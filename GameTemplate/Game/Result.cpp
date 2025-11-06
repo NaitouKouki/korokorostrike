@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "TotalScore.h"
 #include "FrameCount.h"
+#include "BackGround.h"
 
 Result::Result()
 {
@@ -35,11 +36,11 @@ void Result::Update()
 	{
 		DeleteGO(m_totalscore);
 		DeleteGO(FindGO<FrameCount>("framecount"));
-		DeleteGO(m_game);	
+		DeleteGO(FindGO<BackGround>("background"));
+		DeleteGO(m_game);
 		NewGO<Title>(0, "title");
 		
 		DeleteGO(this);	
-
 	}
 }
 
