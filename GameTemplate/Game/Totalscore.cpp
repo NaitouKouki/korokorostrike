@@ -13,15 +13,12 @@ bool Totalscore::Start()
 	m_fontRender.SetColor(g_vec4Gray);
     m_mainScoreFont.SetPosition(650.0f, 275.0f, 500.0f);
     m_mainScoreFont.SetColor(g_vec4Gray);
-
     m_scoreFonts.resize(10);
     for (int i = 0; i < 10; ++i) {
         m_scoreFonts[i] = std::make_unique<FontRender>();
         m_scoreFonts[i]->SetPosition(650.0f, 100.0f - i * 40.0f, 500.0f);
         m_scoreFonts[i]->SetColor(g_vec4Gray);
     }
-
-
     m_game = FindGO<Game>("game");
     return true;
 }
@@ -75,11 +72,6 @@ void Totalscore::RegisterGameScore()
     }
     m_totalScore += m_gamescore;
     m_gamescore = 0;
-}
-
-int Totalscore::GetTotalScore() const
-{
-    return m_totalScore;
 }
 
 void Totalscore::Render(nsK2EngineLow::RenderContext& rc)

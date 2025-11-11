@@ -16,11 +16,14 @@ public:
 
     void AddScore(int points);          // スコア加算
     void RegisterGameScore();           // ゲームごとにスコア登録
-    int  GetTotalScore() const;         // 合計スコア取得
     int m_score = 0;                    // 現在のスコア
     int m_gamescore = 0;                // 今回ゲームのスコア
-private:
     int m_totalScore = 0;               // 全体の合計スコア
+    int GetTotalScore() const
+    {
+        return m_totalScore;
+    }
+private:
     int m_gameScores[10] = {};          // 各ゲームのスコア配列
     bool m_isVisible = true;            // 表示状態フラグ
 private:

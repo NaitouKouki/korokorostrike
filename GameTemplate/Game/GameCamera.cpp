@@ -3,15 +3,8 @@
 #include "Player.h"
 #include "Game.h"
 
-GameCamera::GameCamera()
-{
-
-}
-
-GameCamera::~GameCamera()
-{
-
-}
+GameCamera::GameCamera(){}
+GameCamera::~GameCamera(){}
 
 bool GameCamera::Start()
 {
@@ -23,68 +16,72 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
-	//プレイヤのゲームオブジェクトを取得。
 	m_player = FindGO<Player>("player");
-	if (m_player == nullptr) {
-		return;
+	if (m_player == nullptr) return;
+
+	// 初期化（初回のみ）
+	if (!m_isInit) {
+		m_springCamera.Init(*g_camera3D, 1000.0f, true, 5.0f);
+		m_isInit = true;
 	}
 
-		if (!m_isInit) {
-			//ばねカメラの初期化。
-			m_springCamera.Init(
-				*g_camera3D,		//ばねカメラの処理を行うカメラを指定する。
-				1000.0f,			//カメラの移動速度の最大値。
-				true,				//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う。
-				5.0f				//カメラに設定される球体コリジョンの半径。第３引数がtrueの時に有効になる。
-			);
-			m_isInit = true;
+
+	Vector3 target = m_player->rbPos;
+	target.y += 80.0f;
+	target += g_camera3D->GetForward() * 20.0f;
+
+	static bool followEnabled = true;
+	const float stopZ = 900.0f;  // 停止ライン（Z軸位置）
+
+	if (followEnabled)
+	{
+		if (target.z > stopZ) {
+			followEnabled = false;  // 一度だけ追尾解除
 		}
-		//カメラを更新。
-		//注視点を計算する。
-		Vector3 target = m_player->rbPos;
-		//プレイヤの足元からちょっと上を注視点とする。
-		target.y += 80.0f;
-		target += g_camera3D->GetForward() * 20.0f;
+		else {
+			// 通常の追尾処理
+			Vector3 toCameraPosOld = m_toCameraPos;
 
-		Vector3 toCameraPosOld = m_toCameraPos;
-		//パッドの入力を使ってカメラを回す。
-		float x = g_pad[0]->GetRStickXF();
-		float y = g_pad[0]->GetRStickYF();
-		//Y軸周りの回転
-		Quaternion qRot;
-		qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
-		qRot.Apply(m_toCameraPos);
-		//X軸周りの回転。
-		Vector3 axisX;
-		axisX.Cross(Vector3::AxisY, m_toCameraPos);
-		axisX.Normalize();
-		qRot.SetRotationDeg(axisX, 1.5f * y);
-		qRot.Apply(m_toCameraPos);
-		//カメラの回転の上限をチェックする。
-		//注視点から視点までのベクトルを正規化する。
-		//正規化すると、ベクトルの大きさが１になる。
-		//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
-		Vector3 toPosDir = m_toCameraPos;
-		toPosDir.Normalize();
-		if (toPosDir.y < -0.5f) {
-			//カメラが上向きすぎ。
-			m_toCameraPos = toCameraPosOld;
+			float x = g_pad[0]->GetRStickXF();
+			float y = g_pad[0]->GetRStickYF();
+
+			Quaternion qRot;
+			qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
+			qRot.Apply(m_toCameraPos);
+
+			Vector3 axisX;
+			axisX.Cross(Vector3::AxisY, m_toCameraPos);
+			axisX.Normalize();
+			qRot.SetRotationDeg(axisX, 1.5f * y);
+			qRot.Apply(m_toCameraPos);
+
+			Vector3 toPosDir = m_toCameraPos;
+			toPosDir.Normalize();
+			if (toPosDir.y < -0.5f || toPosDir.y > 0.8f) {
+				m_toCameraPos = toCameraPosOld;
+			}
+
+			Vector3 pos = target + m_toCameraPos;
+			m_springCamera.SetPosition(pos);
+			m_springCamera.SetTarget(target);
+			m_springCamera.Update();
 		}
-		else if (toPosDir.y > 0.8f) {
-			//カメラが下向きすぎ。
-			m_toCameraPos = toCameraPosOld;
-		}
+	}
+	else
+	{
+		Vector3 currentPos = g_camera3D->GetPosition();
+		Vector3 currentTarget = g_camera3D->GetTarget();
 
-		//視点を計算する。
-		Vector3 pos = target + m_toCameraPos;
-
-		//バネカメラに注視点と視点を設定する。
-		m_springCamera.SetPosition(pos);
-		m_springCamera.SetTarget(target);
-
-		//カメラの更新。
+		m_springCamera.SetPosition(currentPos);
+		m_springCamera.SetTarget(currentTarget);
 		m_springCamera.Update();
+	}
+	if (!followEnabled && m_player->rbPos.z < 850.0f) {
+		followEnabled = true;  // 再追尾開始
+	}
+
 }
+
 
 void GameCamera::Render(nsK2EngineLow::RenderContext& rc)
 {

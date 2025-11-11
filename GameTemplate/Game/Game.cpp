@@ -26,11 +26,9 @@ bool Game::Start()
 
 	m_currentGame = 1;
 	m_throwCount = 1;
-	m_state = 0;	
-	
-	NewGO<BackGround>(0, "background");
+	m_state = 0;
 
-	// Game::Start()
+	NewGO<BackGround>(0, "background");
 	m_frameCount = NewGO<FrameCount>(0, "framecount");
 	m_frameCount->SetFrame(m_currentGame , m_maxGameCount);
 
@@ -53,15 +51,15 @@ void Game::Update()
 	switch (m_state)
 	{
 	case 0:
-		// 通常プレイ中（何もせず待つ）
 		break;
-
 	case 1:
-		// 次の投球（2投目）
-		DeleteGO(m_player);
-		DeleteGO(m_camera);
-		m_player = NewGO<Player>(0, "player");
-		m_camera = NewGO<GameCamera>(0, "camera");
+		if(m_player != nullptr || m_camera != nullptr)
+		{
+			DeleteGO(m_player);
+			DeleteGO(m_camera);
+			m_player = NewGO<Player>(0, "player");
+			m_camera = NewGO<GameCamera>(0, "camera");
+		}
 		m_throwCount = 2;
 		m_state = 0; // 状態を戻す
 		break;
@@ -81,10 +79,8 @@ void Game::Update()
 		else 
 		{
 			// 全5ゲーム終了 → 結果画面
-			DeleteAll();
-			DeleteGO(m_frameCount);
 			NewGO<Result>(0, "result");
-			m_state = 3;
+			DeleteGO(this);
 		}
 		break;
 	default:
@@ -94,8 +90,8 @@ void Game::Update()
 
 void Game::mainStage()
 {
-	m_player = NewGO<Player>(0, "player");
-	m_camera = NewGO<GameCamera>(0, "camera");
+		m_player = NewGO<Player>(0, "player");
+		m_camera = NewGO<GameCamera>(0, "camera");
 
 	Vector3 pinPositions[10] = {
 		{  0.0f, 30.0f, 700.0f },
