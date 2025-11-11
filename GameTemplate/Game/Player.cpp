@@ -100,11 +100,11 @@ void Player::Update()
 	if (g_pad[0]->IsTrigger(enButtonY)) {
 		Vector3 dir = Vector3::Back;
 		dir.Normalize();
-		m_rigidBody.SetLinearVelocity(dir * 1600.0f);
+		m_rigidBody.SetLinearVelocity(dir * 800.0f);
 		m_isThrown = true;
 	}
 
-	if ((m_ballPosition.y < -50.0f || m_ballPosition.y > 300.0f) && m_game->m_state == 0)
+	if ((m_ballPosition.y < -50.0f || m_ballPosition.y > 700.0f) && m_game->m_state == 0)
 	{
 		m_rigidBody.SetPositionAndRotation(m_startPosition, Quaternion::Identity);
 		m_rigidBody.SetLinearVelocity(Vector3::Zero);
@@ -126,7 +126,6 @@ void Player::Update()
 		if (m_totalscore->m_gamescore == 10) {
 			m_game->m_state = 2;
 			m_totalscore->RegisterGameScore();
-			m_totalscore->m_gamescore = 0;
 		}
 	}
 }

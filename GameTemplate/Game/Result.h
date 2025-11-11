@@ -25,5 +25,4 @@ private:
 	Totalscore*		m_totalscore = nullptr;
 	FrameCount*		m_frameCount = nullptr;
 	BackGround*		m_background = nullptr;
-	int				m_score = 100;
 };
