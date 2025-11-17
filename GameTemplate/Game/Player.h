@@ -3,6 +3,7 @@
 class Result;
 class Game;
 class GameCamera;
+class Pause;
 class Pin;
 class Totalscore;
 
@@ -16,12 +17,14 @@ public:
 
 	bool Start() override;
 	void Update() override;
+	void SetPause(bool isPause);
 	void Render(nsK2EngineLow::RenderContext& rc) override;
-
 	const Vector3& GetPosition() const { return m_ballPosition; }
 
 	Vector3				rbPos = Vector3::Zero;
 	Quaternion			rbRot = Quaternion::Identity;
+	bool				m_isControl = true;
+	bool				m_isPause = false;
 
 private:
 	ModelRender			m_ballRender;
@@ -29,10 +32,11 @@ private:
 	RigidBodyInitData	rbInitData;
 	RigidBody			m_rigidBody;
 
-	Pin*				m_pin = nullptr;
-	GameCamera*			m_camera = nullptr;
-	Result*				m_Result = nullptr;
+	Pin*				m_pin = nullptr;	
 	Game*				m_game = nullptr;
+	GameCamera*			m_camera = nullptr;
+	Pause*				m_pause = nullptr;
+	Result*				m_Result = nullptr;
 	Totalscore*			m_totalscore = nullptr;
 	Vector3				m_ballPosition = Vector3::Zero;
 	Vector3				m_startPosition = Vector3(0.0f, 40.0f, -800.0f);	// É{Å[ÉãÇÃèâä˙à íu

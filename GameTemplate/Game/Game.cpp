@@ -39,7 +39,7 @@ bool Game::Start()
 	// Physics設定
 	//当たり判定を可視化する
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-	PhysicsWorld::GetInstance()->SetGravity({ 0.0f, -400.0f, -5.0f });
+	PhysicsWorld::GetInstance()->SetGravity({ 0.0f, -400.0f, 0.0f });
 	m_totalscore = NewGO<Totalscore>(0, "totalscore");
 
 	return true;
@@ -47,7 +47,6 @@ bool Game::Start()
 
 void Game::Update()
 {
-
 	switch (m_state)
 	{
 	case 0:
@@ -113,7 +112,7 @@ void Game::mainStage()
 	}
 }
 
-void Game::DeleteAll()
+void Game::DeleteAll ()
 {
 
 	DeleteGO(m_player);

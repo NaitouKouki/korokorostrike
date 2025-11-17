@@ -23,6 +23,7 @@
     <ClCompile Include="SelectPanel.cpp" />
     <ClCompile Include="FrameCount.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Pause.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -41,5 +42,6 @@
     <ClInclude Include="SelectPanel.h" />
     <ClInclude Include="FrameCount.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Pause.h" />
   </ItemGroup>
 </Project>
