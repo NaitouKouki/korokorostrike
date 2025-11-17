@@ -9,12 +9,11 @@ class Pin : public IGameObject
 public:
 	Pin();
 	~Pin();
-	// スタート
 	bool Start() override;
-	// アップデート
 	void Update() override;
-	// レンダー
 	void Render(nsK2EngineLow::RenderContext& rc) override;
+	void SetID(int id) { m_pinID = id; }
+	void SetInitPosition(const Vector3& pos) { m_pinPosition = pos; }
 
 	Vector3				m_pinPosition = Vector3::Zero;
 	Vector3				m_scale = Vector3::One;		// スケール
@@ -23,8 +22,6 @@ public:
 	Quaternion			boRot = Quaternion::Identity;
 	RigidBodyInitData	boInitData;
 	RigidBody			m_rigidBody;	// 剛体
-	void SetID(int id) { m_pinID = id; }
-	void SetInitPosition(const Vector3& pos) { m_pinPosition = pos; }
 	//座標を取得。
 	const Vector3& GetPosition()const
 	{
