@@ -17,8 +17,8 @@ bool Title::Start()
     m_titleSprite.SetPosition(Vector3(0.0f, 0.0f, 0.0f)); // ここはエンジンの原点に合わせる
 
     // ボタン（幅・高さは任意）
-    m_startSprite.Init("Assets/Sprite/StartButton.DDS", 500.0f, 240.0f);
-    m_selectSprite.Init("Assets/Sprite/SelectButton.DDS", 500.0f, 240.0f);
+    m_startSprite.Init("Assets/Sprite/ingame.DDS", 500.0f, 480.0f);
+    m_selectSprite.Init("Assets/Sprite/custom.DDS", 600.0f, 410.0f);
 
     m_startBasePos = Vector3(-400.0f, -200.0f, 0.0f); 
     m_selectBasePos = Vector3(400.0f, -200.0f, 0.0f);  
@@ -36,10 +36,10 @@ void Title::Update()
     float dt = GameTime().GetFrameDeltaTime(); // あれば使う。なければ小さめの固定値 (1/60) を使う
     m_animTime += dt;
 
-    if (g_pad[0]->IsTrigger(enButtonX)) {
+    if (g_pad[0]->IsTrigger(enButtonRight)) {
         m_selectedIndex = 1;
     }
-    else if (g_pad[0]->IsTrigger(enButtonA)) {
+    else if (g_pad[0]->IsTrigger(enButtonLeft)) {
         m_selectedIndex = 0;
     }
 

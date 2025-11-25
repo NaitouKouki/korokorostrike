@@ -112,7 +112,26 @@ void Player::Update()
 			m_isThrown = true;
 		}
 
+		if(m_isThrown)
+		{
+			PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -409.8f, 0.0f));
+			//if (!g_pad[0]->IsPressAnyKey())
+			//{
+			//	float damping = exp(-m_timer * 0.003f);
+			//	// 時間が延びると指数的に減衰率が小さくなる
 
+			//	Vector3 velocity = m_rigidBody.GetLinearVelocity();
+			//	velocity *= damping;
+			//	m_rigidBody.SetLinearVelocity(velocity);
+			//}
+			//else {
+			//	m_timer = 0.0f; // タイマーリセット
+			//}
+		}
+		else 
+		{
+			PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -9.8f, 0.0f));
+		}
 
 		if ((m_ballPosition.y < -50.0f || m_ballPosition.y > 700.0f) && m_game->m_state == 0)
 		{

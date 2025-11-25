@@ -31,7 +31,7 @@ void GameCamera::Update()
 	target += g_camera3D->GetForward() * 20.0f;
 
 	static bool followEnabled = true;
-	const float stopZ = 900.0f;  // 停止ライン（Z軸位置）
+	const float stopZ = 1500.0f;  // 停止ライン（Z軸位置）
 
 	if (followEnabled)
 	{
@@ -76,7 +76,7 @@ void GameCamera::Update()
 		m_springCamera.SetTarget(currentTarget);
 		m_springCamera.Update();
 	}
-	if (!followEnabled && m_player->rbPos.z < 850.0f) {
+	if (!followEnabled && m_player->rbPos.z < 1450.0f) {
 		followEnabled = true;  // 再追尾開始
 	}
 
