@@ -11,14 +11,18 @@ bool SelectPanel::Start()
 {            
     LoadRandomImage();
     // ボタン（幅・高さは任意
-    m_firstSprite.Init("Assets/Sprite/first.DDS", 400.0f, 140.0f);
-    m_secondSprite.Init("Assets/Sprite/second.DDS", 400.0f, 140.0f);
+	m_firstSprite.Init(m_imagePaths[3].c_str(), 300.0f, 100.0f);  // 5回モード
+	m_secondSprite.Init(m_imagePaths[4].c_str(), 300.0f, 100.0f); // 10回モード
+	m_thirdSprite.Init(m_imagePaths[5].c_str(), 300.0f, 200.0f); // スタートボタン
+	m_fourthSprite.Init(m_imagePaths[6].c_str(), 300.0f, 200.0f); // 選択ボタン
 
-    m_firstBasePos = Vector3(0.0f, 200.0f, 0.0f);
+    m_firstBasePos = Vector3(200.0f, 200.0f, 0.0f);
     m_secondBasePos = Vector3(500.0f, 200.0f, 0.0f);
+	m_thirdBasePos = Vector3(200.0f, 0.0f, 0.0f);
+	m_fourthBasePos = Vector3(500.0f, 0.0f, 0.0f);
 
     // 初期配置（必ず毎フレーム SetPosition するので Start では基準のみ）
-    m_selectedIndex = 0;
+    m_gameCountIndex = 0;
     m_animTime = 0.0f;
     return true;
 }
@@ -32,32 +36,61 @@ void SelectPanel::Update()
 
     // 選択中は少し上下に動く（bob アニメ）＋若干拡大
     float bob = sinf(m_animTime * 6.0f) * 6.0f; // 振幅6px, 周期は調整可
-    Vector3 startPos = m_firstBasePos;
-    Vector3 selectPos = m_secondBasePos;
-    Vector3 startScale = Vector3::One;
-    Vector3 selectScale = Vector3::One;
+    Vector3 firstPos = m_firstBasePos;
+    Vector3 secondPos = m_secondBasePos;
+	Vector3 thirdPos = m_thirdBasePos;
+	Vector3 fourthPos = m_fourthBasePos;
+
+    Vector3 firstScale = Vector3::One;
+    Vector3 secondScale = Vector3::One;
+	Vector3 thirdScale = Vector3::One;
+	Vector3 fourthScale = Vector3::One;
 
     const float HIGHLIGHT_OFFSET = -12.0f; // 選択時に上に移動させるなら負
     const float HIGHLIGHT_SCALE = 1.08f;   // 選択時拡大率
 	// 入力処理
     if (g_pad[0]->IsTrigger(enButtonDown))
     {
-        m_nextIndex = 1;
+        if (m_nextIndex == 0) {
+            m_nextIndex = 1;
+        }
+        else if(m_nextIndex == 1)
+        {
+            m_nextIndex = 2;
+		}
     }
     if (g_pad[0]->IsTrigger(enButtonUp))
     {
-        m_nextIndex = 0;
+        if (m_nextIndex == 2) 
+        {
+            m_nextIndex = 1;
+        }
+		else if (m_nextIndex == 1)
+        {
+			m_nextIndex = 0;
+        }
     }
     if (m_nextIndex == 0) {
         // 方向キーで選択切り替え
-        if (g_pad[0]->IsTrigger(enButtonA)) {
-            m_selectedIndex = 0; // 通常モード
+        if (g_pad[0]->IsTrigger(enButtonLeft)) {
+            m_gameCountIndex = 0; // 通常モード
         }
-        if (g_pad[0]->IsTrigger(enButtonX)) {
-            m_selectedIndex = 1; // 10回モード
+        if (g_pad[0]->IsTrigger(enButtonRight)) {
+            m_gameCountIndex = 1; // 10回モード
         }
     }
-    if(m_nextIndex == 1)
+    if (m_nextIndex == 1)
+    {
+        if(g_pad[0]->IsTrigger(enButtonLeft))
+        {
+			m_obstacleIndex = 0; // 障害物あり
+		}
+        if (g_pad[0]->IsTrigger(enButtonRight))
+        {
+			m_obstacleIndex = 1; // 障害物なし
+        }
+    }
+    if(m_nextIndex == 2)
     {
         // Aボタンで確定してGameへ
         if (g_pad[0]->IsTrigger(enButtonY)) {
@@ -72,56 +105,72 @@ void SelectPanel::Update()
 	}
 
         
-    if (m_selectedIndex == 0)
+    if (m_gameCountIndex == 0)
     {
-        startPos.y += bob + HIGHLIGHT_OFFSET;
-        startScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
+        firstPos.y += bob + HIGHLIGHT_OFFSET;
+        firstScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
         // 非選択は少し暗くする（SetMulColorが使えるなら）
         m_secondSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
         m_firstSprite.SetMulColor(Vector4(1, 1, 1, 1));
     }
-    else
+	else if (m_gameCountIndex == 1)
     {
-        selectPos.y += bob + HIGHLIGHT_OFFSET;
-        selectScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
+        secondPos.y += bob + HIGHLIGHT_OFFSET;
+        secondScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
         m_firstSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
         m_secondSprite.SetMulColor(Vector4(1, 1, 1, 1));
     }
-    if(m_nextIndex == 1)
+
+    if (m_obstacleIndex == 0)
+    {
+        thirdPos.y += bob + HIGHLIGHT_OFFSET;
+        thirdScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
+        m_thirdSprite.SetMulColor(Vector4(1, 1, 1, 1));
+        m_fourthSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
+    }
+    else if (m_obstacleIndex == 1)
+    {
+        fourthPos.y += bob + HIGHLIGHT_OFFSET;
+        fourthScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
+        m_thirdSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
+        m_fourthSprite.SetMulColor(Vector4(1, 1, 1, 1));
+    }
+    if(m_nextIndex == 1 || m_nextIndex == 2)
     {
 		//インデックスが1のときは動かないようにする
-		startPos = m_firstBasePos;
-		selectPos = m_secondBasePos;
+		firstPos = m_firstBasePos;
+		secondPos = m_secondBasePos;
 	}
+    if (m_nextIndex == 0 || m_nextIndex == 2) 
+    {
+		thirdPos = m_thirdBasePos;
+		fourthPos = m_fourthBasePos;
+    }
 
-    m_firstSprite.SetPosition(startPos);
-    m_firstSprite.SetScale(startScale);
+    m_firstSprite.SetPosition(firstPos);
+    m_firstSprite.SetScale(firstScale);
     m_firstSprite.Update();
 
-    m_secondSprite.SetPosition(selectPos);
-    m_secondSprite.SetScale(selectScale);
+    m_secondSprite.SetPosition(secondPos);
+    m_secondSprite.SetScale(secondScale);
     m_secondSprite.Update();
+
+	m_thirdSprite.SetPosition(thirdPos);
+	m_thirdSprite.SetScale(thirdScale);
+	m_thirdSprite.Update();
+
+	m_fourthSprite.SetPosition(fourthPos);
+	m_fourthSprite.SetScale(fourthScale);
+	m_fourthSprite.Update();
 }
 
 void SelectPanel::Render(RenderContext& rc)
 {
-    // 選択状態を画面に文字で出す(デバッグ用)
-    wchar_t text[128];
-    if (m_selectedIndex == 0) {
-        swprintf_s(text, L"Mode: 5 Game");
-    }
-    else {
-        swprintf_s(text, L"Mode: 10 Game");
-    }
-
-    font.SetPosition(0.0f, -400.0f, 0.0f);
-    font.SetText(text);
-    font.SetColor(g_vec4Black);
-    font.Draw(rc);
-
     m_sprite.Draw(rc);
     m_firstSprite.Draw(rc);
     m_secondSprite.Draw(rc);
+	m_thirdSprite.Draw(rc);
+	m_fourthSprite.Draw(rc);
 }
 
 void SelectPanel::LoadRandomImage()
@@ -133,10 +182,10 @@ void SelectPanel::LoadRandomImage()
     float r = dist(gen);
     std::string selectedPath;
 
-    if (r < 0.05f) {
+    if (r < 0.03f) {
         selectedPath = m_imagePaths[2];
     }
-    else if (r < 0.25f) {
+    else if (r < 0.05f) {
         selectedPath = m_imagePaths[1];
     }
     else {
@@ -152,7 +201,7 @@ void SelectPanel::ApplySelection()
     Game* game = NewGO<Game>(0, "game");
 
     // 選択内容に応じて設定変更
-    if (m_selectedIndex == 1) {
+    if (m_gameCountIndex == 1) {
         game->m_maxGameCount = 10;  // 拡張モード
     }
     else {

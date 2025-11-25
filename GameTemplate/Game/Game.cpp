@@ -39,7 +39,8 @@ bool Game::Start()
 	// Physics設定
 	//当たり判定を可視化する
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-	PhysicsWorld::GetInstance()->SetGravity({ 0.0f, -400.0f, 0.0f });
+	//一応重力を設定しておく
+	PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -9.8f, 0.0f));
 	m_totalscore = NewGO<Totalscore>(0, "totalscore");
 
 	return true;
@@ -93,16 +94,16 @@ void Game::mainStage()
 		m_camera = NewGO<GameCamera>(0, "camera");
 
 	Vector3 pinPositions[10] = {
-		{  0.0f, 30.0f, 700.0f },
-		{ -20.0f, 30.0f, 740.0f },
-		{  20.0f, 30.0f, 740.0f },
-		{ -40.0f, 30.0f, 780.0f },
-		{   0.0f, 30.0f, 780.0f },
-		{  40.0f, 30.0f, 780.0f },
-		{ -60.0f, 30.0f, 820.0f },
-		{ -20.0f, 30.0f, 820.0f },
-		{  20.0f, 30.0f, 820.0f },
-		{  60.0f, 30.0f, 820.0f }
+		{  0.0f, 30.0f, 1200.0f },
+		{ -20.0f, 30.0f, 1240.0f },
+		{  20.0f, 30.0f, 1240.0f },
+		{ -40.0f, 30.0f, 1280.0f },
+		{   0.0f, 30.0f, 1280.0f },
+		{  40.0f, 30.0f, 1280.0f },
+		{ -60.0f, 30.0f, 1320.0f },
+		{ -20.0f, 30.0f, 1320.0f },
+		{  20.0f, 30.0f, 1320.0f },
+		{  60.0f, 30.0f, 1320.0f },
 	};
 
 	for (int i = 0; i < 10; i++) {

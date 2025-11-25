@@ -39,7 +39,6 @@ void Result::Update()
 		DeleteGO(FindGO<BackGround>("background"));
 		DeleteGO(m_game);
 		NewGO<Title>(0, "title");
-		
 		DeleteGO(this);	
 	}
 }

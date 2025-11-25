@@ -14,7 +14,7 @@ Pause::~Pause() {}
 
 bool Pause::Start()
 {
-    m_sprite.Init("Assets/Sprite/Pause.DDS", 1920.0f, 1080.0f);
+    m_sprite.Init("Assets/Sprite/LoadToPause.DDS", 1920.0f, 1080.0f);
     m_sprite.SetPosition({0.0f, 0.0f, 0.0f});
     return true;
 }
@@ -23,8 +23,8 @@ void Pause::Update()
 {
     // Bボタンでポーズ解除
     if (g_pad[0]->IsTrigger(enButtonB)) {
-        // Playerに制御を戻す
-        Player* player = FindGO<Player>("player");
+        // playerを一度削除し再生成する
+		Player* player = FindGO<Player>("player");
         if (player != nullptr) {
             player->SetPause(false);
         }
