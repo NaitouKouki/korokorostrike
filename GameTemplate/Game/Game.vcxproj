@@ -228,6 +228,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Pin.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="FrameCount.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Pin.h" />
     <ClInclude Include="Player.h" />
