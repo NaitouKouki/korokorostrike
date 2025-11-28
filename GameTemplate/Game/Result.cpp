@@ -5,6 +5,7 @@
 #include "TotalScore.h"
 #include "FrameCount.h"
 #include "BackGround.h"
+#include "Obstacle.h"
 
 Result::Result()
 {
@@ -37,6 +38,8 @@ void Result::Update()
 		DeleteGO(m_totalscore);
 		DeleteGO(FindGO<FrameCount>("framecount"));
 		DeleteGO(FindGO<BackGround>("background"));
+		//‚à‚µáŠQ•¨‚ª‚ ‚éê‡áŠQ•¨‚ğ”j‰ó‚·‚é
+		DeleteGO(FindGO<Obstacle>("obstacle"));
 		DeleteGO(m_game);
 		NewGO<Title>(0, "title");
 		DeleteGO(this);	

@@ -11,6 +11,7 @@ class Stage;
 class Totalscore;
 class FrameCount;
 class BackGround;
+class Obstacle;
 
 class Game : public IGameObject
 {
@@ -21,12 +22,15 @@ public:
 	void Update();
 	void mainStage();
 	void DeleteAll();
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc);	
+	void EnableObstacle() { m_obstacleCount = true; }
 
 	int				m_state = 0;
 	int				m_currentGame = 0;   // 現在のゲーム数（1~5）
 	int				m_throwCount = 0;    // 現在の投球回数（1 or 2）
 	int				m_maxGameCount = 5; // 全5ゲーム制
+	bool			m_obstacleCount = false;
+
 
 private:
 	LevelRender		m_levelRender;
@@ -39,5 +43,6 @@ private:
 	Totalscore*		m_totalscore = nullptr;
 	FrameCount*		m_frameCount = nullptr;
 	BackGround*		m_background = nullptr;
+	Obstacle*		m_obstacle = nullptr;
 	Pin*			pins[10];
 };

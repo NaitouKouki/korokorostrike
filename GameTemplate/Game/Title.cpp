@@ -3,12 +3,17 @@
 #include "Game.h"
 #include "SelectPanel.h"
 
-// 画面サイズ（必要なら実際のゲームの値に合わせて変更）
-static const float SCREEN_W = 1920.0f;
-static const float SCREEN_H = 1080.0f;
-
 Title::Title(){}
 Title::~Title(){}
+
+namespace 
+{
+    // 画面サイズ（必要なら実際のゲームの値に合わせて変更）
+    static const float SCREEN_W = 1920.0f;
+    static const float SCREEN_H = 1080.0f;
+    const float HIGHLIGHT_OFFSET = -12.0f; // 選択時に上に移動させるなら負
+    const float HIGHLIGHT_SCALE = 1.08f;   // 選択時拡大率
+}
 
 bool Title::Start()
 {
@@ -65,9 +70,6 @@ void Title::Update()
     Vector3 selectPos = m_selectBasePos;
     Vector3 startScale = Vector3::One;
     Vector3 selectScale = Vector3::One;
-
-    const float HIGHLIGHT_OFFSET = -12.0f; // 選択時に上に移動させるなら負
-    const float HIGHLIGHT_SCALE = 1.08f;   // 選択時拡大率
 
     if (m_selectedIndex == 0) {
         startPos.y += bob + HIGHLIGHT_OFFSET;

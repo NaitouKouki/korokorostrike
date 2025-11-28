@@ -24,6 +24,7 @@
     <ClCompile Include="FrameCount.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -43,5 +44,6 @@
     <ClInclude Include="FrameCount.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="Obstacle.h" />
   </ItemGroup>
 </Project>

@@ -9,15 +9,15 @@
 #include "Result.h"
 #include "FrameCount.h"
 #include "BackGround.h"
+#include "Obstacle.h"
 
-Game::Game()
-{
-}
+Game::Game(){}
 
 Game::~Game()
 {
 	DeleteAll();
 	DeleteGO(m_stage);
+	DeleteGO(m_obstacle);
 }
 
 bool Game::Start()
@@ -32,6 +32,7 @@ bool Game::Start()
 	m_frameCount = NewGO<FrameCount>(0, "framecount");
 	m_frameCount->SetFrame(m_currentGame , m_maxGameCount);
 
+
 	m_stage = NewGO<Stage>(0, "stage");
 
 	mainStage();
@@ -39,9 +40,10 @@ bool Game::Start()
 	// Physics設定
 	//当たり判定を可視化する
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-	//一応重力を設定しておく
-	PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -9.8f, 0.0f));
 	m_totalscore = NewGO<Totalscore>(0, "totalscore");
+	if (m_obstacleCount == true) {
+		m_obstacle = NewGO<Obstacle>(0, "obstacle");
+	}
 
 	return true;
 }
