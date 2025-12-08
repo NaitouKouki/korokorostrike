@@ -6,6 +6,7 @@
 #include "GameCamera.h"
 #include "Totalscore.h"
 #include "Result.h"
+#include "Strike.h"
 
 Player::Player() {}
 Player::~Player() {}
@@ -28,6 +29,9 @@ bool Player::Start()
 	m_rigidBody.Init(rbInitData);
 	m_rigidBody.SetFriction(1);
 
+	m_ballRender.SetShadowCasterFlag(true);   // この物体は影を落とす
+	m_ballRender.IsShadowCaster();
+
 	// ゲーム管理オブジェクトの取得
 	m_game = FindGO<Game>("game");
 
@@ -36,6 +40,8 @@ bool Player::Start()
 
 void Player::Update()
 {
+
+	m_totalscore = FindGO<Totalscore>("totalscore");
 	m_timer += g_gameTime->GetFrameDeltaTime();
 	// 現在位置を反映
 	m_rigidBody.GetPositionAndRotation(rbPos, rbRot);
@@ -76,9 +82,12 @@ void Player::Update()
 			// モデルと物理位置を更新
 			m_ballRender.SetPosition(m_startPosition);
 			m_rigidBody.SetPositionAndRotation(m_startPosition, Quaternion::Identity);
+
+			//ボールがまだ投げられていない場合一時的に重力を緩和する
+			PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -1.8f, 0.0f));
 		}
 		//正面に投げる
-		if (g_pad[0]->IsTrigger(enButtonA)) {
+		if (g_pad[0]->IsTrigger(enButtonY)) {
 			Vector3 dir = Vector3::Front;
 			dir.Normalize();
 			m_rigidBody.SetLinearVelocity(dir * 800.0f);
@@ -105,7 +114,7 @@ void Player::Update()
 			m_isThrown = true;
 		}
 		//バックする(?)
-		if (g_pad[0]->IsTrigger(enButtonY)) {
+		if (g_pad[0]->IsTrigger(enButtonA)) {
 			Vector3 dir = Vector3::Back;
 			dir.Normalize();
 			m_rigidBody.SetLinearVelocity(dir * 800.0f);
@@ -115,32 +124,14 @@ void Player::Update()
 		if(m_isThrown)
 		{
 			PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -409.8f, 0.0f));
-			//if (!g_pad[0]->IsPressAnyKey())
-			//{
-			//	float damping = exp(-m_timer * 0.003f);
-			//	// 時間が延びると指数的に減衰率が小さくなる
-
-			//	Vector3 velocity = m_rigidBody.GetLinearVelocity();
-			//	velocity *= damping;
-			//	m_rigidBody.SetLinearVelocity(velocity);
-			//}
-			//else {
-			//	m_timer = 0.0f; // タイマーリセット
-			//}
-		}
-		else 
-		{
-			PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -9.8f, 0.0f));
 		}
 
-		if ((m_ballPosition.y < -50.0f || m_ballPosition.y > 700.0f) && m_game->m_state == 0)
+		if ((m_ballPosition.y < -80.0f || m_ballPosition.y > 700.0f) && m_game->m_state == 0)
 		{
 			m_rigidBody.SetPositionAndRotation(m_startPosition, Quaternion::Identity);
 			m_rigidBody.SetLinearVelocity(Vector3::Zero);
 			m_rigidBody.SetAngularVelocity(Vector3::Zero);
 			m_isThrown = false; // 再び調整可能に
-
-			m_totalscore = FindGO<Totalscore>("totalscore");
 			if (m_game->m_throwCount == 1)
 			{
 				m_game->m_state = 1;
@@ -150,14 +141,31 @@ void Player::Update()
 				m_game->m_state = 2;
 				m_totalscore->RegisterGameScore();
 			}
-
-			// ストライク時の即時スキップ処理
-			if (m_totalscore->m_gamescore == 10) {
-				m_game->m_state = 2;
-				m_totalscore->RegisterGameScore();
+		}
+		// ストライク時の即時スキップ処理
+		m_totalscore = FindGO<Totalscore>("totalscore");
+		if (m_totalscore->m_gamescore == 10) {
+			if (m_StrikeCount == false){
+				m_strike = NewGO<Strike>(0, "strike");
+				m_StrikeCount = true;
+				m_timer = 0.0f;
+			}
+			if (m_StrikeCount == true) {
+				PhysicsWorld::GetInstance()->SetGravity(Vector3(0.0f, -109.8f, 0.0f));//一時的に重力を緩和し落下するスピードや回転を調整する
+				float damping = exp(-m_timer * 100.0f);// 時間が延びると指数的に減衰率が小さくなる
+				Vector3 velocity = m_rigidBody.GetLinearVelocity();
+				velocity *= damping;
+				m_rigidBody.SetLinearVelocity(velocity);
+				if (m_timer > 3.0f){
+					if (m_game->m_currentGame == 5) {
+						DeleteGO(m_strike);
+					}
+					m_StrikeCount = false;
+					m_game->m_state = 2;
+					m_totalscore->RegisterGameScore();
+				}
 			}
 		}
-
 		//発射前ならポーズ画面に移行できるようにする
 		if (!m_isThrown && g_pad[0]->IsTrigger(enButtonStart)) {
 			if (!m_isPause) {

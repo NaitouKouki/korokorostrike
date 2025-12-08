@@ -16,10 +16,11 @@ private:
 	PhysicsDynamicObject	m_phyObject;//ìÆìIó¨ëÃóp
 	Quaternion				qRot;
 	float					m_angleSpeed = 0.0f;
-	float					m_moveSpeed = 1.0f;
-	float					m_timer = 5.0f;
-	float					moveDir = 50.0f;         // 1.0f = è„, -1.0f = â∫
-	float					bottomLimit = -150.0f;
-	float					topLimit = 30.0f;
+	float					m_moveSpeed = 0.0f;
+	float					rotSpeed = 1.0f;
+	float					m_timer = 0.0f;
+	float					moveDir = 800.0f;
+	float					bottomLimit = -300.0f;
+	float					topLimit = 300.0f;
 	Vector3					m_position = Vector3::Zero;
 };

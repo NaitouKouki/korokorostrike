@@ -23,12 +23,14 @@ public:
 
 private:
 
-    SpriteRender m_titleSprite;    // タイトル背景
-    SpriteRender m_startSprite;    // 「START」ボタン
-    SpriteRender m_selectSprite;   // 「SELECT」ボタン
+    SpriteRender    m_titleSprite;    //タイトル背景
+    SpriteRender    m_startSprite;    //「START」ボタン
+    SpriteRender    m_selectSprite;   //「SELECT」ボタン
+    FontRender      m_pressA;     //Aボタン説明用フォント
 
-    int   m_selectedIndex = 0;     // 現在の選択（0 = Start / 1 = Select）
-    float m_animTime = 0.0f;       // アニメーション時間
+    int             m_selectedIndex = 0;     // 現在の選択（0 = Start / 1 = Select）
+    float           m_animTime = 0.0f;       // アニメーション時間
+    float           m_timer = 0.0f;          // 汎用タイマー
 
     // ボタンの基準位置（中央基準）
     Vector3 m_startBasePos = Vector3::Zero;

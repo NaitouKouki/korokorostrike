@@ -33,7 +33,7 @@ void Pause::Update()
     }
 
     // 選択肢切り替えなど（必要なら）
-    if (g_pad[0]->IsTrigger(enButtonX)) {        
+    if (g_pad[0]->IsTrigger(enButtonA)) {        
         NewGO<Title>(0, "title"); 
         auto pins = FindGOs<Pin>("pin");
         for (auto pin : pins) {
