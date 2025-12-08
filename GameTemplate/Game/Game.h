@@ -29,6 +29,7 @@ public:
 	int				m_currentGame = 0;   // 現在のゲーム数（1~5）
 	int				m_throwCount = 0;    // 現在の投球回数（1 or 2）
 	int				m_maxGameCount = 5; // 全5ゲーム制
+	float			m_timer = 0.0f;
 	bool			m_obstacleCount = false;
 
 
@@ -45,4 +46,5 @@ private:
 	BackGround*		m_background = nullptr;
 	Obstacle*		m_obstacle = nullptr;
 	Pin*			pins[10];
+	SPointLight		m_pointLight[3];
 };

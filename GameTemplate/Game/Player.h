@@ -6,6 +6,7 @@ class GameCamera;
 class Pause;
 class Pin;
 class Totalscore;
+class Strike;
 
 #include "gameObject/IGameObject.h"
 
@@ -38,12 +39,14 @@ private:
 	Pause*				m_pause = nullptr;
 	Result*				m_Result = nullptr;
 	Totalscore*			m_totalscore = nullptr;
+	Strike*				m_strike = nullptr;
 	Vector3				m_ballPosition = Vector3::Zero;
 	Vector3				m_startPosition = Vector3(0.0f, 40.0f, -800.0f);	// ボールの初期位置
 	Vector3				m_currentPosition;// ボールの現在位置
 	Vector3				m_scale = Vector3::One;
 	Vector3				m_throwDir;             // 投球方向
 	bool				m_isThrown = false;	// 投球済みフラグ
+	bool				m_StrikeCount = false;
 	float				m_curveAmount = 0.0f;
 	float				moveSpeed = 0.0f;
 	float				m_timer = 0.0f;

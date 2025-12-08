@@ -120,14 +120,14 @@ void SelectPanel::Update()
         if (m_decisionIndex == 0)
         {
             // Aボタンで確定してGameへ
-            if (g_pad[0]->IsTrigger(enButtonB)) {
+            if (g_pad[0]->IsTrigger(enButtonA)) {
                 ApplySelection();
                 DeleteGO(this);
             }
         }
         else {
             // Bボタンでタイトルに戻る
-            if (g_pad[0]->IsTrigger(enButtonB)) {
+            if (g_pad[0]->IsTrigger(enButtonA)) {
                 NewGO<Title>(0, "title");
                 DeleteGO(this);
             }
@@ -255,10 +255,10 @@ void SelectPanel::Render(RenderContext& rc)
             float r = dist(gen);
             std::string selectedPath;
 
-            if (r < 0.03f) {
+            if (r < 0.01f) {
                 selectedPath = m_imagePaths[2];
             }
-            else if (r < 0.05f) {
+            else if (r < 0.02f) {
                 selectedPath = m_imagePaths[1];
             }
             else {

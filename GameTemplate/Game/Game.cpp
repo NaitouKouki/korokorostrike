@@ -32,9 +32,7 @@ bool Game::Start()
 	m_frameCount = NewGO<FrameCount>(0, "framecount");
 	m_frameCount->SetFrame(m_currentGame , m_maxGameCount);
 
-
 	m_stage = NewGO<Stage>(0, "stage");
-
 	mainStage();
 
 	// Physics設定
@@ -44,6 +42,10 @@ bool Game::Start()
 	if (m_obstacleCount == true) {
 		m_obstacle = NewGO<Obstacle>(0, "obstacle");
 	}
+
+	m_pointLight[0].SetPosition(Vector3(0.0f, 200.0f, 0.0f));
+	m_pointLight[0].SetColor(Vector3(1.0f, 1.0f, 1.0f));
+	m_pointLight[0].SetRange(2000.0f);
 
 	return true;
 }
@@ -88,6 +90,8 @@ void Game::Update()
 	default:
 		break;
 	}
+
+	m_pointLight[0].Update();
 }
 
 void Game::mainStage()

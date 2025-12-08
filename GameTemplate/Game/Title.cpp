@@ -25,12 +25,16 @@ bool Title::Start()
     m_startSprite.Init("Assets/Sprite/ingame.DDS", 500.0f, 480.0f);
     m_selectSprite.Init("Assets/Sprite/custom.DDS", 600.0f, 410.0f);
 
-    m_startBasePos = Vector3(-400.0f, -200.0f, 0.0f); 
-    m_selectBasePos = Vector3(400.0f, -200.0f, 0.0f);  
+    m_startBasePos = Vector3(-400.0f, -100.0f, 0.0f); 
+    m_selectBasePos = Vector3(400.0f, -100.0f, 0.0f);  
 
     // 初期配置（必ず毎フレーム SetPosition するので Start では基準のみ）
     m_selectedIndex = 0;
     m_animTime = 0.0f;
+
+    m_pressA.SetPosition(-250.0f, -350.0f, 0.0f);   // 画面中央より少し下に配置
+    m_pressA.SetScale(1.8f);                     // 少し大きめに
+    m_pressA.SetText(L"Press A Button");
 
     return true;
 }
@@ -49,7 +53,7 @@ void Title::Update()
     }
 
     // 決定（Aボタン）
-    if (g_pad[0]->IsTrigger(enButtonB))
+    if (g_pad[0]->IsTrigger(enButtonA))
     {
         if (m_selectedIndex == 0) {
             NewGO<Game>(0, "game");
@@ -92,6 +96,13 @@ void Title::Update()
     m_selectSprite.SetPosition(selectPos);
     m_selectSprite.SetScale(selectScale);
     m_selectSprite.Update();
+
+    float t = g_gameTime->GetFrameDeltaTime();
+    m_timer += t;
+
+    // 0～1 を行ったり来たりする
+    float alpha = (sinf(m_timer * 5.0f) * 0.5f) + 0.5f;
+    m_pressA.SetColor(Vector4(0.0f, 0.0f, 0.0f, alpha));
 }
 
 void Title::Render(RenderContext& rc)
@@ -102,4 +113,7 @@ void Title::Render(RenderContext& rc)
     // ボタン（描画順も重要）
     m_startSprite.Draw(rc);
     m_selectSprite.Draw(rc);
+
+    //Aボタンのフォント
+    m_pressA.Draw(rc);
 }
