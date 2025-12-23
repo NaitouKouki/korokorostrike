@@ -9,26 +9,26 @@ SelectPanel::SelectPanel() {}
 SelectPanel::~SelectPanel() {}
 
 bool SelectPanel::Start()
-{            
+{
     LoadRandomImage();
     // ボタン（幅・高さは任意
 	m_fiveCountSprite.Init(m_imagePaths[3].c_str(), 200.0f, 100.0f);  // 5回モード
 	m_tenCountSprite.Init(m_imagePaths[4].c_str(), 200.0f, 100.0f); // 10回モード
 	m_obstacleSprite.Init(m_imagePaths[5].c_str(), 300.0f, 260.0f); // 障害物ありボタン
 	m_nothingSprite.Init(m_imagePaths[6].c_str(), 300.0f, 260.0f); // 障害物なしボタン
-	m_backTitleButtonSprite.Init(m_imagePaths[7].c_str(), 400.0f, 200.0f); // タイトルへ戻るボタン
-	m_customStartButtonSprite.Init(m_imagePaths[8].c_str(), 400.0f, 200.0f); // ゲームスタートボタン
+    m_customStartButtonSprite.Init(m_imagePaths[7].c_str(), 750.0f, 370.0f); // ゲームスタートボタン
+	m_backTitleButtonSprite.Init(m_imagePaths[8].c_str(), 300.0f, 240.0f); // タイトルへ戻るボタン
     m_frameBaseSprite.Init(m_imagePaths[9].c_str(), 400.0f, 200.0f);//フレーム数選択
     m_obstacleBaseSprite.Init(m_imagePaths[10].c_str(), 400.0f, 200.0f);//障害物の有無
 
-    m_fiveCountBasePos = Vector3(200.0f, 200.0f, 0.0f);
-    m_tenCountBasePos = Vector3(500.0f, 200.0f, 0.0f);
-	m_obstacleBasePos = Vector3(200.0f, 0.0f, 0.0f);
-	m_nothingBasePos = Vector3(500.0f, 0.0f, 0.0f);
-	m_backTitleButtonBasePos = Vector3(200.0f, -200.0f, 0.0f);
-	m_customStartButtonBasePos = Vector3(500.0f, -200.0f, 0.0f);
-    m_frameBasePos = Vector3(-200.0f,200.0f,0.0f);
-    m_obstacleBaseBasePos = Vector3(-200.0f,0.0f,0.0f);
+    m_fiveCountBasePos = Vector3(-100.0f, 200.0f, 0.0f);
+    m_tenCountBasePos = Vector3(200.0f, 200.0f, 0.0f);
+	m_obstacleBasePos = Vector3(-100.0f, 0.0f, 0.0f);
+	m_nothingBasePos = Vector3(200.0f, 0.0f, 0.0f);
+	m_customStartButtonBasePos = Vector3(0.0f, -200.0f, 0.0f);
+	m_backTitleButtonBasePos = Vector3(550.0f, -300.0f, 0.0f);
+    m_frameBasePos = Vector3(-500.0f,200.0f,0.0f);
+    m_obstacleBaseBasePos = Vector3(-500.0f,0.0f,0.0f);
 
     // 初期配置（必ず毎フレーム SetPosition するので Start では基準のみ）
     m_gameCountIndex = 0;
@@ -48,18 +48,18 @@ void SelectPanel::Update()
     Vector3 m_fiveCountPos = m_fiveCountBasePos;
     Vector3 m_tenCountPos = m_tenCountBasePos;
     Vector3 m_obstaclePos = m_obstacleBasePos;
-    Vector3 m_nothingPos = m_nothingBasePos;
-    Vector3 m_backTitleButtonPos = m_backTitleButtonBasePos;
+    Vector3 m_nothingPos = m_nothingBasePos;  
     Vector3 m_customStartButtonPos = m_customStartButtonBasePos;
+    Vector3 m_backTitleButtonPos = m_backTitleButtonBasePos;
     Vector3 m_frameBaseposition = m_frameBasePos;
     Vector3 m_obstacleBaseposition = m_obstacleBaseBasePos;
 
     Vector3 m_fiveCountScale = Vector3::One;
     Vector3 m_tenCountScale = Vector3::One;
     Vector3 m_obstacleScale = Vector3::One;
-    Vector3 m_nothingScale = Vector3::One;
-    Vector3 m_backTitleButtonScale = Vector3::One;
+    Vector3 m_nothingScale = Vector3::One;   
     Vector3 m_customStartButtonScale = Vector3::One;
+    Vector3 m_backTitleButtonScale = Vector3::One;
 
     const float HIGHLIGHT_OFFSET = -12.0f; // 選択時に上に移動させるなら負
     const float HIGHLIGHT_SCALE = 1.08f;   // 選択時拡大率
@@ -93,7 +93,7 @@ void SelectPanel::Update()
         if (g_pad[0]->IsTrigger(enButtonRight)) {
             m_gameCountIndex = 1; // 10回モード
         }
-        m_frameBaseSprite.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+        m_frameBaseSprite.SetMulColor(Vector4(1.2f, 1.2f, 1.2f, 1.0f));
     }
     if (m_nextIndex == 1)
     {
@@ -166,17 +166,17 @@ void SelectPanel::Update()
     }
     if (m_decisionIndex == 0)
     {
-        m_backTitleButtonPos.y += bob + HIGHLIGHT_OFFSET;
-        m_backTitleButtonScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
-        m_customStartButtonSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
-        m_backTitleButtonSprite.SetMulColor(Vector4(1, 1, 1, 1));
-    }
-    if (m_decisionIndex == 1)
-    {
         m_customStartButtonPos.y += bob + HIGHLIGHT_OFFSET;
         m_customStartButtonScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
         m_customStartButtonSprite.SetMulColor(Vector4(1, 1, 1, 1));
         m_backTitleButtonSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
+    }
+    if (m_decisionIndex == 1)
+    {
+        //m_backTitleButtonPos.y += bob + HIGHLIGHT_OFFSET;
+        m_backTitleButtonScale = Vector3(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE, 1.0f);
+        m_customStartButtonSprite.SetMulColor(Vector4(0.6f, 0.6f, 0.6f, 1.0f));
+        m_backTitleButtonSprite.SetMulColor(Vector4(1, 1, 1, 1));
     }
     if (m_nextIndex == 0 || m_nextIndex == 1)
     {
@@ -255,10 +255,10 @@ void SelectPanel::Render(RenderContext& rc)
             float r = dist(gen);
             std::string selectedPath;
 
-            if (r < 0.01f) {
+            if (r < 0.0001f) {
                 selectedPath = m_imagePaths[2];
             }
-            else if (r < 0.02f) {
+            else if (r < 0.0002f) {
                 selectedPath = m_imagePaths[1];
             }
             else {

@@ -6,8 +6,8 @@ Obstacle::Obstacle() {}
 Obstacle::~Obstacle() {}
 bool Obstacle::Start()
 {
-	m_boxRender.Init("Assets/modelData/ball.tkm");
-	m_boxRender.SetScale(10.0f,10.0f, 4.0f);
+	m_boxRender.Init("Assets/modelData/obstacle.tkm");
+	m_boxRender.SetScale(4.0f,4.0f, 4.0f);
 	m_boxRender.Update();
 	m_phyObject.CreateFromModel(m_position, m_boxRender.GetModel(), m_boxRender.GetModel().GetWorldMatrix());
 	return true;
@@ -25,13 +25,13 @@ void Obstacle::Update()
 
     pos.x += moveDir + m_moveSpeed * g_gameTime->GetFrameDeltaTime();
 
-    if (pos.x > 200.0f) {
-        pos.x = 200.0f;
-        moveDir = -600.0f;
+    if (pos.x > 250.0f) {
+        pos.x = 250.0f;
+        moveDir = -6.0f;
     }
-    else if (pos.x < -200.0f) {
-        pos.x = -200.0f;
-        moveDir = 600.0f;
+    else if (pos.x < -250.0f) {
+        pos.x = -250.0f;
+        moveDir = 6.0f;
     }
 
     m_phyObject.SetRotation(qRot);

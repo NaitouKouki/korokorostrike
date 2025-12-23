@@ -16,8 +16,8 @@ private:
 	PhysicsDynamicObject	m_phyObject;//“®“I—¬‘Ì—p
 	Quaternion				qRot;
 	float					m_angleSpeed = 0.0f;
-	float					m_moveSpeed = 0.0f;
-	float					rotSpeed = 1.0f;
+	float					m_moveSpeed = 1.0f;
+	float					rotSpeed = 3.0f;
 	float					m_timer = 0.0f;
 	float					moveDir = 800.0f;
 	float					bottomLimit = -300.0f;

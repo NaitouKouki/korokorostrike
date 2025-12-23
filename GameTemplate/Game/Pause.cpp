@@ -14,7 +14,7 @@ Pause::~Pause() {}
 
 bool Pause::Start()
 {
-    m_sprite.Init("Assets/Sprite/LoadToPause.DDS", 1920.0f, 1080.0f);
+    m_sprite.Init("Assets/Sprite/suiteiPause.DDS", 1920.0f, 1080.0f);
     m_sprite.SetPosition({0.0f, 0.0f, 0.0f});
     return true;
 }
@@ -22,7 +22,7 @@ bool Pause::Start()
 void Pause::Update()
 {
     // Bボタンでポーズ解除
-    if (g_pad[0]->IsTrigger(enButtonB)) {
+    if (g_pad[0]->IsTrigger(enButtonStart)) {
         // playerを一度削除し再生成する
 		Player* player = FindGO<Player>("player");
         if (player != nullptr) {
@@ -33,7 +33,7 @@ void Pause::Update()
     }
 
     // 選択肢切り替えなど（必要なら）
-    if (g_pad[0]->IsTrigger(enButtonA)) {        
+    if (g_pad[0]->IsTrigger(enButtonY)) {        
         NewGO<Title>(0, "title"); 
         auto pins = FindGOs<Pin>("pin");
         for (auto pin : pins) {
